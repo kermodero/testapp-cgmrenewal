@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/application_6.xsd" version="6">
+  <display-name>adp</display-name>
+  <module id="adpweb">
+    <web>
+      <web-uri>adpweb.war</web-uri>
+      <context-root>adp</context-root>
+    </web>
+  </module>
+  <module id="adprest">
+    <web>
+      <web-uri>adprest.war</web-uri>
+      <context-root>adpr</context-root>
+    </web>
+  </module>  
+  <module id="adpserver">
+    <ejb>adpserver.jar</ejb>
+  </module>
+  <security-role>
+    <role-name>Administrator</role-name>
+  </security-role>
+  <security-role>
+    <role-name>Viewer</role-name>
+  </security-role>
+  <security-role>
+    <role-name>ClaimRecorder</role-name>
+  </security-role>
+  <security-role>
+    <role-name>ClaimApprover</role-name>
+  </security-role>
+  <security-role>
+    <role-name>PaymentRecorder</role-name>
+  </security-role>
+  <security-role>
+    <role-name>PaymentApprover</role-name>
+  </security-role>
+  <security-role>
+    <role-name>Registrar</role-name>
+  </security-role>
+  <security-role>
+    <role-name>Verifier</role-name>
+  </security-role>
+  <security-role>
+    <role-name>DocProcessor</role-name>
+  </security-role>
+</application>

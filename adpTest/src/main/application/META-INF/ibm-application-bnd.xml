@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application-bnd xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://websphere.ibm.com/xml/ns/javaee"
+    xsi:schemaLocation="http://websphere.ibm.com/xml/ns/javaee http://websphere.ibm.com/xml/ns/javaee/ibm-application-bnd_1_1.xsd"
+    version="1.1">
+  <security-role name="Administrator">
+    <group name="MOH-G-CDSD-ADP-ADP-D-ADMINISTRATOR"/>
+    <run-as userid="UATADPAdmin" password="{xor}Dz4sLCgwLTttb25vew=="/>
+  </security-role>
+
+  <security-role name="Viewer">
+    <group name="MOH-G-CDSD-ADP-ADP-D-VIEWER"/>
+  </security-role>
+
+  <security-role name="ClaimRecorder">
+    <group name="MOH-G-CDSD-ADP-ADP-D-CLAIM_RECORDER"/>
+  </security-role>
+
+  <security-role name="ClaimApprover">
+    <group name="MOH-G-CDSD-ADP-ADP-D-CLAIM_APPROVER"/>
+  </security-role>
+
+  <security-role name="PaymentRecorder">
+    <group name="MOH-G-CDSD-ADP-ADP-D-PAY_RECORDER"/>
+  </security-role>
+
+  <security-role name="PaymentApprover">
+    <group name="MOH-G-CDSD-ADP-ADP-D-PAY_APPROVER"/>
+  </security-role>
+
+  <security-role name="Registrar">
+    <group name="MOH-G-CDSD-ADP-ADP-D-REGISTRAR"/>
+  </security-role>
+
+  <security-role name="Verifier">
+    <group name="MOH-G-CDSD-ADP-ADP-D-VERIFIER"/>
+  </security-role>
+
+  <security-role name="DocProcessor">
+    <group name="MOH-G-CDSD-ADP-ADP-D-DOC_PROCESSOR"/>
+  </security-role>
+
+</application-bnd>
+

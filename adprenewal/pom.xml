@@ -1,0 +1,63 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>adpTestApp</artifactId>
+		<groupId>moh</groupId>
+		<version>${revision}</version>
+	</parent>
+	<artifactId>adprenewal</artifactId>
+	<name>adprenewal</name>
+	<packaging>jar</packaging>
+	<profiles>
+		<profile>
+			<id>java8</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<maven.compiler.source>1.8</maven.compiler.source>
+				<maven.compiler.target>1.8</maven.compiler.target>
+				<javaee.version>8.0</javaee.version>
+			</properties>
+		</profile>
+	</profiles>
+	<dependencies>
+		<dependency>
+			<groupId>moh</groupId>
+			<artifactId>adpcommon</artifactId>
+			<version>6.12.0</version>
+		</dependency>
+		<dependency>
+			<groupId>moh</groupId>
+			<artifactId>adpservice</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+<!-- 		<dependency>
+			<groupId>moh.adp.test</groupId>
+			<artifactId>adptestcommon</artifactId>
+			<version>${revision}</version>
+		</dependency> -->
+		<dependency>
+			<groupId>javax</groupId>
+			<artifactId>javaee-api</artifactId>
+			<version>${javaee.version}</version>
+			<!-- <scope>provided</scope> -->
+		</dependency>
+		<dependency>
+			<groupId>commons-beanutils</groupId>
+			<artifactId>commons-beanutils</artifactId>
+			<version>1.9.3</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>5.2.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>5.2.2</version>
+		</dependency>
+	</dependencies>
+</project>

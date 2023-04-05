@@ -1,0 +1,29 @@
+
+<html>
+  <head>
+    <title>Adam Test Suites</title>      
+    <meta charset="utf-8">
+    <meta content="width=device-width,initial-scale=1,minimal-ui" name="viewport">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Material+Icons">
+    <link rel="stylesheet" href="css/vue-material/1.0.0-beta-15/vue-material.min.css">
+    <link rel="stylesheet" href="css/vue-material/1.0.0-beta-15/black-green-light.css">
+    <script type="module" src="js/init.js"></script>
+    <link href="css/vc.css" rel="stylesheet" type="text/css"></link>
+    <link rel="icon" href="img/favicon.ico" type="image/x-icon">
+  </head>
+  <body>
+    <div id="ats-app">
+      <ats-header></ats-header>
+      <router-view></router-view>
+      <ats-footer></ats-footer>
+    </div>
+	<script src="js/vue/2.6.14/vue.min.js"></script>
+	<script src="js/vue-router/3.5.3/vue-router.min.js"></script>
+	<script src="js/vue-material/1.0.0-beta-15/vue-material.min.js"></script>
+	<script type="module">
+        Vue.use(VueMaterial.default)
+    	import { ats } from './js/init.js'
+    	ats.init();
+  	</script>
+    </body>
+</html>

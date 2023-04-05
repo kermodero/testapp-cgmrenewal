@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	attributeFormDefault="unqualified" elementFormDefault="qualified">
+	<xs:element name="form1">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Form">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element type="xs:string" name="formType" />
+							<xs:element type="xs:string" name="deviceCategory" />
+							<xs:element type="xs:string" name="VersionNumber" />
+							<xs:element name="section1">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element type="xs:string" name="applicantLastname" />
+										<xs:element type="xs:string" name="applicantFirstname" />
+										<xs:element type="xs:string" name="applicantMiddleinitial" />
+										<xs:element type="xs:string" name="healthNo" />
+										<xs:element type="xs:string" name="versionNo" />
+										<xs:element type="xs:string" name="DateOfBirth" />
+										<xs:element type="xs:string" name="sex" />
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="section2">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element type="xs:string" name="question1" />
+										<xs:element type="xs:string" name="question2" />
+										<xs:element type="xs:string" name="question3" />
+										<xs:element type="xs:string" name="certification" />
+										<xs:element type="xs:string" name="signedBy" />
+										<xs:element type="xs:string" name="signature" />
+										<xs:element type="xs:string" name="signDate" />
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="section3">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="contact">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element type="xs:string" name="relationship" />
+													<xs:element type="xs:string" name="agentLastname" />
+													<xs:element type="xs:string" name="agentFirstname" />
+													<xs:element type="xs:string" name="agentMiddleinitial" />
+													<xs:element type="xs:string" name="agentUnitNo" />
+													<xs:element type="xs:string" name="agentStreetNo" />
+													<xs:element type="xs:string" name="agentStreetName" />
+													<xs:element type="xs:string" name="agentRRoute" />
+													<xs:element type="xs:string" name="agentCity" />
+													<xs:element type="xs:string" name="agentProvince" />
+													<xs:element type="xs:string" name="agentPostalCode" />
+													<xs:element type="xs:string" name="agentHomePhone" />
+													<xs:element type="xs:string" name="agentBusPhone" />
+													<xs:element type="xs:string" name="agentPhoneExtension" />
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="section4">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="vendor">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element type="xs:string" name="vendorBusName" />
+													<xs:element type="xs:string" name="adpVendorRegNo" />
+													<xs:element type="xs:string" name="vendorLastname" />
+													<xs:element type="xs:string" name="vendorFirstname" />
+													<xs:element type="xs:string" name="vendorPositionTitle" />
+													<xs:element type="xs:string" name="vendorBusPhone" />
+													<xs:element type="xs:string" name="vendorPhoneExtension" />
+													<xs:element type="xs:string" name="vendorUnitNo" />
+													<xs:element type="xs:string" name="vendorStreetNo" />
+													<xs:element type="xs:string" name="vendorStreetName" />
+													<xs:element type="xs:string" name="vendorCity" />
+													<xs:element type="xs:string" name="vendorProvince" />
+													<xs:element type="xs:string" name="vendorPostalCode" />
+													<xs:element type="xs:string" name="vendorSignature" />
+													<xs:element type="xs:string" name="vendorSignDate" />
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>
