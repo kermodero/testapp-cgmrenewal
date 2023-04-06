@@ -24,7 +24,7 @@ public class GMRenewalTranslator extends RenewalTranslator<RenewalRecord> {
 	public String translate(RenewalRecord r) {
 		Form1 f = new Form1();
 		populate(f, r);
-		return marshall(f);
+		return marshall(f, r);
 	}
 
 	private void populate(Form1 f1, RenewalRecord r) {
@@ -41,17 +41,17 @@ public class GMRenewalTranslator extends RenewalTranslator<RenewalRecord> {
 	private void populateSection2(Form f, RenewalRecord r) {
 		f.setSection2(new Form1.Form.Section2());
 		Section2 section2 = f.getSection2();
-		section2.setCertification("valid");
-		section2.setQuestion1("t");
-		section2.setQuestion2("t");
-		section2.setQuestion3("f");
-		section2.setSignature("Blah, blah");
-		section2.setSignDate("03/30/2024");
-		section2.setSignedBy("Mr Ganite");		
+		section2.setCertification(r.getCertification());
+		section2.setQuestion1(r.getQuestion1());
+		section2.setQuestion2(r.getQuestion2());
+		section2.setQuestion3(r.getQuestion3());
+		section2.setSignature(r.getSignature());
+		section2.setSignDate(sdf.format(r.getSignDate()));
+		section2.setSignedBy(r.getSignedBy());		
 	}
 
-	private String marshall(Form1 f) {
-		File file = getFile(f);
+	private String marshall(Form1 f, RenewalRecord r) {
+		File file = getFile(r);
 		JAXB.marshal(f, file);
 		try {
 			return new String(Files.readAllBytes(file.toPath()));
@@ -61,10 +61,9 @@ public class GMRenewalTranslator extends RenewalTranslator<RenewalRecord> {
 		return "yaddayadda";
 	}
 	
-	private File getFile(Form1 f) {
-		String xml = "C:/TEMP/rwk_testing_" + ++i + ".xml";
+	private File getFile(RenewalRecord r) {
 		try {
-			return Files.createFile(Paths.get(xml)).toFile();
+			return Files.createFile(Paths.get(r.getFileName())).toFile();
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;

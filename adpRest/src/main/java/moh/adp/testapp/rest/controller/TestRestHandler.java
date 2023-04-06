@@ -52,9 +52,7 @@ public class TestRestHandler {
 	public Result runRenewal(@PathParam("testId") String testId) throws Exception {
 		logger.debug("regression, scope: " + testId);
 		login();
-		Result r = new Result();
-		adamServer.runRenewal(testId);
-		return r;
+		return adamServer.runRenewal(testId);
 	}
 
 	@GET

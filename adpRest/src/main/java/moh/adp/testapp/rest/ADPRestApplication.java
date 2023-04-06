@@ -16,7 +16,7 @@ public class ADPRestApplication extends Application {
 	}	
 	
 	public Set<Class<?>> getClasses() {
-		Set<Class<?>> classes = new HashSet<Class<?>>();
+		Set<Class<?>> classes = new HashSet<>();
 		classes.add(TestRestHandler.class);
 		return classes;
 	}

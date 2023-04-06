@@ -17,6 +17,10 @@ public class TestDBException extends RuntimeException {
 		this.message = msg;
 	}
 
+	public TestDBException(String msg) {
+		this.message = msg;
+	}
+
 	public Exception getCause() {
 		return cause;
 	}

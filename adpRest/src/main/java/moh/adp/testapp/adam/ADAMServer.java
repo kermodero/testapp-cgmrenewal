@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 
 import moh.adp.db.renewalservice.TestCaseService;
 import moh.adp.db.renewalservice.TestResult;
+import moh.adp.server.util.EntityManagerUtil;
 import moh.adp.testapp.rest.common.Result;
 import moh.adp.testapp.rest.common.TestScope;
 
@@ -63,7 +64,7 @@ public class ADAMServer {
 	public Result runRenewal(String testId) {
 	    System.out.println("running renewal. " + logger + " " + testId + " service? "); // + testCaseService);
 		try {
-			TestResult tr = TestCaseService.instance().runTestCase(testId, em);
+			TestResult tr = TestCaseService.instance().runGMRenewalTestCase(testId, em);
 			return new Result(tr.getMessage() + " " + tr.getOutcome(), Result.Outcome.UNKNOWN);
 		} catch (Exception e) {
 			return new Result("Test run failed: " + e.getMessage(), Result.Outcome.UNKNOWN_EXCEPTION);

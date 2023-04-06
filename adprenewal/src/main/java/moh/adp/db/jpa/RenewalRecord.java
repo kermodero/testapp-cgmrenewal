@@ -1,56 +1,82 @@
 package moh.adp.db.jpa;
 
 import java.io.Serializable;
+import java.sql.Date;
+
 import javax.persistence.*;
 import java.util.List;
-
 
 /**
  * The persistent class for the RENEWAL_RECORD database table.
  * 
  */
 @Entity
-@Table(name="RENEWAL_RECORD", schema="APP")
-@NamedQuery(name="RenewalRecord.findAll", query="SELECT r FROM RenewalRecord r")
+@Table(name = "RENEWAL_RECORD", schema = "APP")
+@NamedQuery(name = "RenewalRecord.findAll", query = "SELECT r FROM RenewalRecord r")
 public class RenewalRecord implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-/*	@Column(name="ADAM_PHYSICIAN_ID")
-	private long adamPhysicianId;*/
+	/*
+	 * @Column(name="ADAM_PHYSICIAN_ID") private long adamPhysicianId;
+	 */
 
-	@Column(name="ADAM_VENDOR_ID")
-	private long adamVendorId;
+	@Column(name = "ADAM_VENDOR_ID")
+	private Long adamVendorId;
 
-	@Column(name="CLIENT_AGENT_ID")
-	private long clientAgentId;
+	@Column(name = "CLIENT_AGENT_ID")
+	private Long clientAgentId;
 
-	@Column(name="DEVICE_CATEGORY")
+	@Column(name = "DEVICE_CATEGORY")
 	private String deviceCategory;
 
-	@Column(name="FORM_VERSION")
+	@Column(name = "FORM_VERSION")
 	private String formVersion;
 
-	@Column(name="HEALTH_NUMBER")
+	@Column(name = "HEALTH_NUMBER")
 	private String healthNumber;
 
-	@Column(name="ORIGINAL_CLAIM_NUM")
+	@Column(name = "ORIGINAL_CLAIM_NUM")
 	private String originalClaimNum;
 
-	//bi-directional many-to-one association to RecordSet
+	@Column(name = "QUESTION1")
+	private String question1;
+
+	@Column(name = "QUESTION2")
+	private String question2;
+
+	@Column(name = "QUESTION3")
+	private String question3;
+
+	@Column(name = "CERTIFICATION")
+	private String certification;
+
+	@Column(name = "SIGNED_BY")
+	private String signedBy;
+
+	@Column(name = "SIGNATURE")
+	private String signature;
+
+	@Column(name = "SIGN_DATE")
+	private Date signDate;
+
+	@Column(name = "FILE_NAME")
+	private String fileName;
+
+	// bi-directional many-to-one association to RecordSet
 	@ManyToOne
-	@JoinColumn(name="RECORD_SET_ID")
+	@JoinColumn(name = "RECORD_SET_ID")
 	private RecordSet recordSet;
 
-	//bi-directional many-to-one association to RenewalRecField
-	@OneToMany(mappedBy="renewalRecord")
+	// bi-directional many-to-one association to RenewalRecField
+	@OneToMany(mappedBy = "renewalRecord")
 	private List<RenewalRecField> renewalRecFields;
 
-	//bi-directional many-to-one association to RenewalRecVariance
-	@OneToMany(mappedBy="renewalRecord")
+	// bi-directional many-to-one association to RenewalRecVariance
+	@OneToMany(mappedBy = "renewalRecord")
 	private List<RenewalRecVariance> renewalRecVariances;
 
 	public RenewalRecord() {
@@ -64,15 +90,14 @@ public class RenewalRecord implements Serializable {
 		this.id = id;
 	}
 
-/*	public long getAdamPhysicianId() {
-		return this.adamPhysicianId;
-	}
+	/*
+	 * public long getAdamPhysicianId() { return this.adamPhysicianId; }
+	 * 
+	 * public void setAdamPhysicianId(long adamPhysicianId) {
+	 * this.adamPhysicianId = adamPhysicianId; }
+	 */
 
-	public void setAdamPhysicianId(long adamPhysicianId) {
-		this.adamPhysicianId = adamPhysicianId;
-	}*/
-
-	public long getAdamVendorId() {
+	public Long getAdamVendorId() {
 		return this.adamVendorId;
 	}
 
@@ -80,7 +105,7 @@ public class RenewalRecord implements Serializable {
 		this.adamVendorId = adamVendorId;
 	}
 
-	public long getClientAgentId() {
+	public Long getClientAgentId() {
 		return this.clientAgentId;
 	}
 
@@ -118,6 +143,70 @@ public class RenewalRecord implements Serializable {
 
 	public void setOriginalClaimNum(String originalClaimNum) {
 		this.originalClaimNum = originalClaimNum;
+	}
+
+	public String getQuestion1() {
+		return question1;
+	}
+
+	public void setQuestion1(String question1) {
+		this.question1 = question1;
+	}
+
+	public String getQuestion2() {
+		return question2;
+	}
+
+	public void setQuestion2(String question2) {
+		this.question2 = question2;
+	}
+
+	public String getQuestion3() {
+		return question3;
+	}
+
+	public void setQuestion3(String question3) {
+		this.question3 = question3;
+	}
+
+	public String getCertification() {
+		return certification;
+	}
+
+	public void setCertification(String certification) {
+		this.certification = certification;
+	}
+
+	public String getSignedBy() {
+		return signedBy;
+	}
+
+	public void setSignedBy(String signedBy) {
+		this.signedBy = signedBy;
+	}
+
+	public String getSignature() {
+		return signature;
+	}
+
+	public void setSignature(String signature) {
+		this.signature = signature;
+	}
+
+	public Date getSignDate() {
+		return signDate;
+	}
+
+	public void setSignDate(Date signDate) {
+		this.signDate = signDate;
+	}
+
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
 	}
 
 	public RecordSet getRecordSet() {

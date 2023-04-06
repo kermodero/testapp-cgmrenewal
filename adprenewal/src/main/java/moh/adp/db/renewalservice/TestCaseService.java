@@ -1,13 +1,13 @@
 package moh.adp.db.renewalservice;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
-
-import javax.annotation.PostConstruct;
 
 import javax.persistence.EntityManager;
 
+import moh.adp.db.common.TestDBException;
 import moh.adp.db.common.TestOutcome;
 import moh.adp.db.convert.Convert;
 import moh.adp.db.etl.ExcelETL;
@@ -17,7 +17,6 @@ import moh.adp.db.jpa.TestSet;
 import moh.adp.db.model.Test;
 import moh.adp.xml.RenewalTranslator;
 import moh.adp.xml.RenewalTranslatorFactory;
-//import moh.adp.test.common.log.UILog;
 
 //Old fashioned singleton because 
 //injection is too convoluted
@@ -46,58 +45,40 @@ public class TestCaseService {
 		ExcelETL.importRecords(testName, description, directory,  em);
 	}
 	
-	public TestResult runTestCase(String testCase, EntityManager em) {
+	public TestResult runGMRenewalTestCase(String testCase, EntityManager em) {
 		try {
-			return runTestCaseDetails(testCase, em);
+			return runGMRenewalTestCaseDetails(testCase, em);
 		} catch (Exception e) {
-			//UILog.log("alright, running test case " + em);
 			e.printStackTrace();
 			return new TestResult(TestOutcome.TEST_APP_FAILURE, "e-Renewal test case. An error was encountered.");
 		}		
 	}
 	
-	public TestResult runTestCaseDetails(String testCase, EntityManager em) {
-		System.out.println("alright, running test case " + em);
+	public TestResult runGMRenewalTestCaseDetails(String testCase, EntityManager em) {
 		List<TestSet> testSets = getTestCases(testCase, em);
 		List<RenewalRecord> records = getRecords(testSets); 
-		List<String> eRenewalXMLDocs = getCGMRenewalESubXMLs(records); 
+		Map<String, String> eRenewalXMLDocs = getCGMRenewalESubXMLs(records); 
 		saveToSFTS(eRenewalXMLDocs);
 		return new TestResult(TestOutcome.EXPECTED_OUTCOME, "alright, running test case");
 	}
-
-	public TestResult tempTest(String testCase, EntityManager em) {
-		System.out.println("alright, running test case " + em);
-		moh.adp.db.jpa.TestEntity test = em.createNamedQuery("Test.byName", moh.adp.db.jpa.TestEntity.class)
-				.setParameter("name", "GENERIC_RENEWAL")
-				.getSingleResult();
-		if (test == null)
-			System.out.println("was null");
-		else {
-			System.out.println("test " + test.getDescription() + " - " + test.getTestSets());		
-			test.getTestSets().forEach(ts -> ts.getDescription());
-		}
-		return new TestResult(TestOutcome.EXPECTED_OUTCOME, "alright, running test case");
-	}
 	
-	private void saveToSFTS(List<String> eRenewalXMLDocs) {
+	private void saveToSFTS(Map<String, String> eRenewalXMLDocs) {
 		if (eRenewalXMLDocs != null)
-			eRenewalXMLDocs.forEach(doc -> System.out.println("DOC " + doc));
+			eRenewalXMLDocs.forEach((name, doc) -> System.out.println("DOC " + doc));
 		System.out.println();
 	}
 
-	private List<String> getCGMRenewalESubXMLs(List<RenewalRecord> records) {
-		List<String> results = new ArrayList<String>();
+	private Map<String, String> getCGMRenewalESubXMLs(List<RenewalRecord> records) {
+		Map<String, String> results = new HashMap<>();
 		RenewalTranslator<RenewalRecord> translator = getTranslator(records); 
-		if (translator == null)
-			return results;
-		records.forEach( r -> results.add(translator.translate(r)) );				
+		records.forEach( r -> results.put(r.getFileName(), translator.translate(r)) );				
 		return results;
 	}
 
 	@SuppressWarnings("unchecked")
 	private RenewalTranslator<RenewalRecord> getTranslator(List<RenewalRecord> records) {
 		if (records == null || records.isEmpty())
-			return null;
+			throw new TestDBException("No renewal records specified.");
 		RenewalRecord r = records.get(0);
 		return (RenewalTranslator<RenewalRecord>)RenewalTranslatorFactory.getRenewalTranslator(r);
 	}
@@ -106,7 +87,7 @@ public class TestCaseService {
 		return testSets.stream()
 				.flatMap(ts -> ts.getRecordSets().stream()
 						.flatMap(rs -> rs.getRenewalRecords().stream()))
-							.collect(Collectors.toList()); //TODO - check this logic...
+							.collect(Collectors.toList());
 	}
 
 	private List<TestSet> getTestCases(String testCase, EntityManager em) {
