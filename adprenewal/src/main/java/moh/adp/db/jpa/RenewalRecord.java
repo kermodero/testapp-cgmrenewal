@@ -36,6 +36,9 @@ public class RenewalRecord implements Serializable {
 	@Column(name = "FORM_VERSION")
 	private String formVersion;
 
+	@Column(name = "RANDOM_RECORDS")
+	private Integer randomRecords;
+
 	@Column(name = "HEALTH_NUMBER")
 	private String healthNumber;
 
@@ -65,6 +68,12 @@ public class RenewalRecord implements Serializable {
 
 	@Column(name = "FILE_NAME")
 	private String fileName;
+	
+	@Column(name = "EXPECTED_OUTCOME")
+	private String expectedOutcome;
+	
+	@Column(name = "ERROR_MESSAGE")
+	private String errorMessage;
 
 	// bi-directional many-to-one association to RecordSet
 	@ManyToOne
@@ -72,7 +81,7 @@ public class RenewalRecord implements Serializable {
 	private RecordSet recordSet;
 
 	// bi-directional many-to-one association to RenewalRecField
-	@OneToMany(mappedBy = "renewalRecord")
+	@OneToMany(mappedBy = "renewalRecord", fetch=FetchType.EAGER)
 	private List<RenewalRecField> renewalRecFields;
 
 	// bi-directional many-to-one association to RenewalRecVariance
@@ -127,6 +136,14 @@ public class RenewalRecord implements Serializable {
 
 	public void setFormVersion(String formVersion) {
 		this.formVersion = formVersion;
+	}
+
+	public Integer getRandomRecords() {
+		return randomRecords;
+	}
+
+	public void setRandomRecords(Integer randomRecords) {
+		this.randomRecords = randomRecords;
 	}
 
 	public String getHealthNumber() {
@@ -207,6 +224,22 @@ public class RenewalRecord implements Serializable {
 
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
+	}
+
+	public String getExpectedOutcome() {
+		return expectedOutcome;
+	}
+
+	public void setExpectedOutcome(String expectedOutcome) {
+		this.expectedOutcome = expectedOutcome;
+	}
+
+	public String getErrorMessage() {
+		return errorMessage;
+	}
+
+	public void setErrorMessage(String errorMessage) {
+		this.errorMessage = errorMessage;
 	}
 
 	public RecordSet getRecordSet() {

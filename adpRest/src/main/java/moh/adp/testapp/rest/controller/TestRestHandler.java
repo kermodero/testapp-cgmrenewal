@@ -19,6 +19,7 @@ import moh.adp.testapp.adam.ADAMServer;
 import moh.adp.testapp.rest.common.Result;
 import moh.adp.testapp.rest.common.TestScope;
 import moh.adp.testapp.util.DummyDataService;
+import moh.adp.testapp.util.Properties;
 
 @Path("adam")
 @Produces("application/json")
@@ -33,11 +34,16 @@ public class TestRestHandler {
 	public Logger logger;	
 	@Inject //TODO Remove this
 	public DummyDataService dummyData;
+	private Properties properties;
 	
 	//private String username = "adpadministrator1";
 	private String username = "adpnopayappv";
 	private String password = "Password2010$";
-
+	
+	public TestRestHandler() {
+		Properties.load();
+	}
+	
 	@GET
 	@Path("/regression/{scope}/{testId}")
 	public Result runTests(@PathParam("scope") String scope, @PathParam("testId") String testId) throws Exception {
@@ -118,7 +124,7 @@ public class TestRestHandler {
 	private void login() throws ServletException {
 		try {
 			request.logout();
-			request.login(username, password);
+			request.login(Properties.get("username"), Properties.get("password"));
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new ServletException(e);

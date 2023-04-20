@@ -22,22 +22,23 @@ import moh.adp.xml.RenewalTranslatorFactory;
 //injection is too convoluted
 public class TestCaseService {
 	private static TestCaseService tcs;
-		
-	private TestCaseService(){
-		
+	
+	private TestCaseService(){		
+	}
+
+	static {
+		tcs = new TestCaseService();
 	}
 	
 	public static TestCaseService instance() {
-		if (tcs == null)
-			tcs = new TestCaseService();
 		return tcs;
 	}
 	
 	public Test getTestCase(String name, EntityManager em) {
-		moh.adp.db.jpa.TestEntity test = em.createNamedQuery("Test.byName", moh.adp.db.jpa.TestEntity.class)
+		moh.adp.db.jpa.TestEntity testEntity = em.createNamedQuery("Test.byName", moh.adp.db.jpa.TestEntity.class)
 												.setParameter("name", name)
 												.getSingleResult();
-		return Convert.bean2Bean(test, Test.class);
+		return Convert.bean2Bean(testEntity, Test.class);
 	}
 
 	public void runETL(String directory, String testName, EntityManager em) {
@@ -71,7 +72,7 @@ public class TestCaseService {
 	private Map<String, String> getCGMRenewalESubXMLs(List<RenewalRecord> records) {
 		Map<String, String> results = new HashMap<>();
 		RenewalTranslator<RenewalRecord> translator = getTranslator(records); 
-		records.forEach( r -> results.put(r.getFileName(), translator.translate(r)) );				
+		records.forEach( r -> RecordGenerator.instance().generateRecords(r, results, translator));	
 		return results;
 	}
 

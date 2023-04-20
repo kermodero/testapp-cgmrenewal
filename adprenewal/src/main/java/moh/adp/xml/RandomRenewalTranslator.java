@@ -26,11 +26,12 @@ import moh.adp.service.vendor.VendorServiceImpl;
 import moh.adp.xml.model.renewal.gm.v202311.Form1;
 import moh.adp.xml.model.renewal.gm.v202311.Form1.Form;
 import moh.adp.xml.model.renewal.gm.v202311.Form1.Form.Section1;
+import moh.adp.xml.model.renewal.gm.v202311.Form1.Form.Section2;
 import moh.adp.xml.model.renewal.gm.v202311.Form1.Form.Section3;
 import moh.adp.xml.model.renewal.gm.v202311.Form1.Form.Section3.Contact;
 import moh.adp.xml.model.renewal.gm.v202311.Form1.Form.Section4;
 
-public abstract class RenewalTranslator<U> {
+public abstract class RandomRenewalTranslator<U> {
 	private static final String FORM_TYPE="RENEWAL";
 	protected final String OUTPUT_DIR = "c:/test/renewals/";		
 	protected SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/YYYY");
@@ -43,6 +44,10 @@ public abstract class RenewalTranslator<U> {
 	}
 
 	protected void populate(Form1 f1, RenewalRecord r) {
+		
+		//SEE AdpRuleDataAccess.java
+		
+		
 		Form f = getForm(f1);
 		f.setDeviceCategory(getDeviceCategory().getCategoryShortName());
 		f.setFormType(FORM_TYPE);

@@ -29,7 +29,7 @@ public class RenewalRecField implements Serializable {
 
 	//bi-directional many-to-one association to RenewalRecord
 	@ManyToOne
-	@JoinColumn(name="CLAIM_RECORD_ID")
+	@JoinColumn(name="RENEWAL_RECORD_ID")
 	private RenewalRecord renewalRecord;
 
 	public RenewalRecField() {

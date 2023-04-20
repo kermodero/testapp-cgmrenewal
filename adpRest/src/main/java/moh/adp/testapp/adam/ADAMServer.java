@@ -15,6 +15,7 @@ import moh.adp.db.renewalservice.TestResult;
 import moh.adp.server.util.EntityManagerUtil;
 import moh.adp.testapp.rest.common.Result;
 import moh.adp.testapp.rest.common.TestScope;
+import moh.adp.testapp.util.Properties;
 
 /*import moh.adp.db.model.ClaimRecord;
 import moh.adp.db.model.RecordSet;
@@ -38,12 +39,12 @@ public class ADAMServer {
 	private UserTransaction userTransaction;
 	
 	public ADAMServer() {
+		
 	}
 
 	@PostConstruct
 	public void init() {
 		System.out.println("constructing ADAMServer. " + logger);
-	//	testCaseService  = new TestCaseService();
 	}
 
 	public Result runNightlyBatchDirectly(TestScope ts, String testId) {
@@ -62,14 +63,12 @@ public class ADAMServer {
 	}
 
 	public Result runRenewal(String testId) {
-	    System.out.println("running renewal. " + logger + " " + testId + " service? "); // + testCaseService);
-		try {
-			TestResult tr = TestCaseService.instance().runGMRenewalTestCase(testId, em);
-			return new Result(tr.getMessage() + " " + tr.getOutcome(), Result.Outcome.UNKNOWN);
-		} catch (Exception e) {
-			return new Result("Test run failed: " + e.getMessage(), Result.Outcome.UNKNOWN_EXCEPTION);
-		}
-
+	    logger.debug("running renewal. " + logger + " " + testId + " service? ");
+	    
+	    System.out.println("username ?  " + Properties.get("username"));
+	    
+	    TestResult tr = TestCaseService.instance().runGMRenewalTestCase(testId, em);
+		return new Result(tr.getMessage() + " " + tr.getOutcome(), Result.Outcome.UNKNOWN);
 	}
 
 /*	public Result runNightlyBatchDirectly(TestScope ts, String testId) {
