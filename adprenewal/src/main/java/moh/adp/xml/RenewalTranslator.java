@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.OpenOption;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
+import java.util.Map;
 
 import javax.xml.bind.JAXB;
 
@@ -36,12 +37,13 @@ public abstract class RenewalTranslator<U> {
 	protected SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/YYYY");
 	public abstract DeviceCategory getDeviceCategory(); 
 	
-	public String translate(RenewalRecord r) {
+	public void translate(RenewalRecord r, Map<String, String> results) {
 		Form1 f = new Form1();
 		populate(f, r);
-		return marshall(f, r);
+		String xml = marshall(f, r);
+		results.put(r.getFileName(), xml);
 	}
-
+	
 	protected void populate(Form1 f1, RenewalRecord r) {
 		Form f = getForm(f1);
 		f.setDeviceCategory(getDeviceCategory().getCategoryShortName());
@@ -70,6 +72,10 @@ public abstract class RenewalTranslator<U> {
     
 	protected void populateSection1(Form f, RenewalRecord r) {
 		Client c = getClient(r);
+		populateSection1(f, r, c);
+	}
+	
+	protected void populateSection1(Form f, RenewalRecord r, Client c) {
 		f.setSection1(new Form1.Form.Section1());
 		Section1 section1 = f.getSection1();
 		section1.setApplicantFirstname(c.getLastName());
@@ -80,11 +86,15 @@ public abstract class RenewalTranslator<U> {
 		section1.setHealthNo(r.getHealthNumber());
 		section1.setVersionNo(r.getFormVersion());
 	}
-		
+
 	protected void populateSection3(Form f, RenewalRecord r) {
+		ClientAgent ca = getClientAgent(r);
+		populateSection3(f, r, ca);	
+	}
+
+	protected void populateSection3(Form f, RenewalRecord r, ClientAgent ca) {
 		f.setSection3(new Form1.Form.Section3());
 		Section3 section3 = f.getSection3();
-		ClientAgent ca = getClientAgent(r);
 		Contact c = new Contact();
 		section3.setContact(c);
 		if (ca == null)
@@ -106,16 +116,21 @@ public abstract class RenewalTranslator<U> {
 		//TODO: verify phone display method (also exists 'formatted display' method)
 		c.setAgentHomePhone(ca.getHomePhone().getPhoneDisplay());
 		c.setAgentBusPhone(ca.getBusinessPhone().getPhoneDisplay());
-		c.setAgentPhoneExtension(ca.getBusinessPhone().getExtension());		
+		c.setAgentPhoneExtension(ca.getBusinessPhone().getExtension());				
 	}
-
+	
 	protected void populateSection4(Form f, RenewalRecord r) {
+		Vendor vendor = getVendor(r);
+		populateSection4(f, r, vendor);
+	}
+	
+	protected void populateSection4(Form f, RenewalRecord r, Vendor vendor) {
 		f.setSection4(new Form1.Form.Section4());
 		Section4 section4 = f.getSection4();		
 		moh.adp.xml.model.renewal.gm.v202311.Form1.Form.Section4.Vendor v = 
 				new moh.adp.xml.model.renewal.gm.v202311.Form1.Form.Section4.Vendor();
 		section4.setVendor(v);
-		Vendor vendor = getVendor(r);
+
 		v.setAdpVendorRegNo(vendor.getVendorNum());
 		v.setVendorBusName(vendor.getLegalBusinessName());
 		if (vendor.getContact() != null) {
@@ -138,7 +153,7 @@ public abstract class RenewalTranslator<U> {
 //		v.setVendorSignDate(??);
 	}
 
-	private Client getClient(RenewalRecord r) {
+	protected Client getClient(RenewalRecord r) {
 		try {
 			 ClientService service = new ClientServiceImpl();
 	         return service.getClientView(r.getHealthNumber()).getAdpClient();			
@@ -148,7 +163,7 @@ public abstract class RenewalTranslator<U> {
 		}
 	}
 
-	private Vendor getVendor(RenewalRecord r) {
+	protected Vendor getVendor(RenewalRecord r) {
 		if (r.getAdamVendorId() == null)
 			return null;
 		VendorService vs = new VendorServiceImpl();		
@@ -160,7 +175,7 @@ public abstract class RenewalTranslator<U> {
 		}
 	}
 	
-	private ClientAgent getClientAgent(RenewalRecord r) {
+	protected ClientAgent getClientAgent(RenewalRecord r) {
 		if (r.getClientAgentId() == null)
 			return null;
 		try {
@@ -194,7 +209,7 @@ public abstract class RenewalTranslator<U> {
 		return Paths.get(r.getFileName()).toFile();
 	}
 	
-	protected void saveFile(String name, String doc) {
+	private void saveFile(String name, String doc) {
 		System.out.println("DOC: " + doc);
 		try {
 			Files.write(Paths.get(OUTPUT_DIR + name), doc.getBytes(), new OpenOption[]{});

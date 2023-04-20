@@ -9,7 +9,7 @@ public class Properties {
 		if (properties == null) {
 			try {
 				properties = new java.util.Properties();
-				properties.load(ClassLoader.getSystemResourceAsStream("adprest.properties"));
+				properties.load(Properties.class.getResourceAsStream("/META-INF/adprest.properties"));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

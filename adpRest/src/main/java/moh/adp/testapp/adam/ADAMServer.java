@@ -12,10 +12,8 @@ import org.slf4j.Logger;
 
 import moh.adp.db.renewalservice.TestCaseService;
 import moh.adp.db.renewalservice.TestResult;
-import moh.adp.server.util.EntityManagerUtil;
 import moh.adp.testapp.rest.common.Result;
 import moh.adp.testapp.rest.common.TestScope;
-import moh.adp.testapp.util.Properties;
 
 /*import moh.adp.db.model.ClaimRecord;
 import moh.adp.db.model.RecordSet;
@@ -64,9 +62,6 @@ public class ADAMServer {
 
 	public Result runRenewal(String testId) {
 	    logger.debug("running renewal. " + logger + " " + testId + " service? ");
-	    
-	    System.out.println("username ?  " + Properties.get("username"));
-	    
 	    TestResult tr = TestCaseService.instance().runGMRenewalTestCase(testId, em);
 		return new Result(tr.getMessage() + " " + tr.getOutcome(), Result.Outcome.UNKNOWN);
 	}

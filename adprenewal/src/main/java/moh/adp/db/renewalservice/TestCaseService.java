@@ -72,7 +72,7 @@ public class TestCaseService {
 	private Map<String, String> getCGMRenewalESubXMLs(List<RenewalRecord> records) {
 		Map<String, String> results = new HashMap<>();
 		RenewalTranslator<RenewalRecord> translator = getTranslator(records); 
-		records.forEach( r -> RecordGenerator.instance().generateRecords(r, results, translator));	
+		records.forEach( r -> translator.translate(r, results));	
 		return results;
 	}
 
