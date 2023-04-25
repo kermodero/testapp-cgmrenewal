@@ -1,5 +1,9 @@
 package moh.adp.db.renewalservice;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.OpenOption;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -65,10 +69,19 @@ public class TestCaseService {
 	
 	private void saveToSFTS(Map<String, String> eRenewalXMLDocs) {
 		if (eRenewalXMLDocs != null)
-			eRenewalXMLDocs.forEach((name, doc) -> System.out.println("DOC " + doc));
+			eRenewalXMLDocs.forEach((name, doc) -> saveFile(name, doc));
 		System.out.println();
 	}
 
+	protected void saveFile(String name, String doc) {
+		System.out.println("DOC: " + doc);
+		try {
+			Files.write(Paths.get("c:/TEST/renewals/" + name), doc.getBytes(), new OpenOption[]{});
+		} catch (IOException e) {
+			throw new TestDBException("couldn't save file", e);
+		}
+	}	
+	
 	private Map<String, String> getCGMRenewalESubXMLs(List<RenewalRecord> records) {
 		Map<String, String> results = new HashMap<>();
 		RenewalTranslator<RenewalRecord> translator = getTranslator(records); 

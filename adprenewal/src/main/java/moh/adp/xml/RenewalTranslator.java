@@ -7,6 +7,7 @@ import java.nio.file.OpenOption;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Map;
+import java.util.Random;
 
 import javax.xml.bind.JAXB;
 
@@ -36,12 +37,13 @@ public abstract class RenewalTranslator<U> {
 	protected final String OUTPUT_DIR = "c:/test/renewals/";		
 	protected SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/YYYY");
 	public abstract DeviceCategory getDeviceCategory(); 
+	public Random random = new Random();
 	
 	public void translate(RenewalRecord r, Map<String, String> results) {
 		Form1 f = new Form1();
 		populate(f, r);
 		String xml = marshall(f, r);
-		results.put(r.getFileName(), xml);
+		results.put(getFileName(f, r.getFileName()), xml);
 	}
 	
 	protected void populate(Form1 f1, RenewalRecord r) {
@@ -62,12 +64,12 @@ public abstract class RenewalTranslator<U> {
 		JAXB.marshal(f, file);
 		try {
 			String content = new String(Files.readAllBytes(file.toPath()));
-			saveFile(r.getFileName(), content);
+//			saveFile(r.getFileName(), content);
 			return content;
 		} catch (IOException e) {
 			e.printStackTrace();
+			throw new TestDBException("Exception marshalling file", e);
 		}
-		return "yaddayadda";
 	}    
     
 	protected void populateSection1(Form f, RenewalRecord r) {
@@ -78,10 +80,10 @@ public abstract class RenewalTranslator<U> {
 	protected void populateSection1(Form f, RenewalRecord r, Client c) {
 		f.setSection1(new Form1.Form.Section1());
 		Section1 section1 = f.getSection1();
-		section1.setApplicantFirstname(c.getLastName());
-		section1.setApplicantLastname(c.getFirstName());
-		section1.setApplicantMiddleinitial(c.getMiddleName());
-		section1.setVersionNo(c.getVersionCode());
+		section1.setApplicantFirstname(blankIfNull(c.getLastName()));
+		section1.setApplicantLastname(blankIfNull(c.getFirstName()));
+		section1.setApplicantMiddleinitial(blankIfNull(c.getMiddleName()));
+		section1.setVersionNo(blankIfNull(c.getVersionCode()));
 		section1.setDateOfBirth(sdf.format(c.getDateOfBirth()));
 		section1.setHealthNo(r.getHealthNumber());
 		section1.setVersionNo(r.getFormVersion());
@@ -100,25 +102,29 @@ public abstract class RenewalTranslator<U> {
 		if (ca == null)
 			return;
 		setClientRelationship(c, ca);
-		c.setAgentFirstname(ca.getFirstName());
-		c.setAgentLastname(ca.getLastName());
-		c.setAgentMiddleinitial(ca.getMiddleName());
+		c.setAgentFirstname(blankIfNull(ca.getFirstName()));
+		c.setAgentLastname(blankIfNull(ca.getLastName()));
+		c.setAgentMiddleinitial(blankIfNull(ca.getMiddleName()));
 		Address a = ca.getMailingAddress();
 		if (a==null)
 			return;
-		c.setAgentUnitNo(a.getUnitNum());
-		c.setAgentStreetNo(a.getStreetNum());
-		c.setAgentStreetName(a.getStreetName());
-		c.setAgentRRoute(a.getLotRrAddress());
-		c.setAgentCity(a.getCityTown());
-		c.setAgentProvince(a.getProvinceShortName());
-		c.setAgentPostalCode(a.getPostalCode());
+		c.setAgentUnitNo(blankIfNull(a.getUnitNum()));
+		c.setAgentStreetNo(blankIfNull(a.getStreetNum()));
+		c.setAgentStreetName(blankIfNull(a.getStreetName()));
+		c.setAgentRRoute(blankIfNull(a.getLotRrAddress()));
+		c.setAgentCity(blankIfNull(a.getCityTown()));
+		c.setAgentProvince(blankIfNull(a.getProvinceShortName()));
+		c.setAgentPostalCode(blankIfNull(a.getPostalCode()));
 		//TODO: verify phone display method (also exists 'formatted display' method)
-		c.setAgentHomePhone(ca.getHomePhone().getPhoneDisplay());
-		c.setAgentBusPhone(ca.getBusinessPhone().getPhoneDisplay());
-		c.setAgentPhoneExtension(ca.getBusinessPhone().getExtension());				
+		c.setAgentHomePhone(blankIfNull(ca.getHomePhone().getPhoneDisplay()));
+		c.setAgentBusPhone(blankIfNull(ca.getBusinessPhone().getPhoneDisplay()));
+		c.setAgentPhoneExtension(blankIfNull(ca.getBusinessPhone().getExtension()));				
 	}
 	
+	private String blankIfNull(String value) {
+		return (value == null)? "" : value;
+	}
+
 	protected void populateSection4(Form f, RenewalRecord r) {
 		Vendor vendor = getVendor(r);
 		populateSection4(f, r, vendor);
@@ -143,14 +149,14 @@ public abstract class RenewalTranslator<U> {
 		Address a = vendor.getAddress();
 		if (a==null)
 			return;
-		v.setVendorUnitNo(a.getUnitNum());
-		v.setVendorStreetNo(a.getStreetNum());
-		v.setVendorStreetName(a.getStreetName());
-		v.setVendorCity(a.getCityTown());
-		v.setVendorProvince(a.getProvinceShortName());
-		v.setVendorPostalCode(a.getPostalCode());
-//		v.setVendorSignature(??);
-//		v.setVendorSignDate(??);
+		v.setVendorUnitNo(blankIfNull(a.getUnitNum()));
+		v.setVendorStreetNo(blankIfNull(a.getStreetNum()));
+		v.setVendorStreetName(blankIfNull(a.getStreetName()));
+		v.setVendorCity(blankIfNull(a.getCityTown()));
+		v.setVendorProvince(blankIfNull(a.getProvinceShortName()));
+		v.setVendorPostalCode(blankIfNull(a.getPostalCode()));
+		v.setVendorSignature("");
+//		v.setVendorSignDate();
 	}
 
 	protected Client getClient(RenewalRecord r) {
@@ -209,13 +215,19 @@ public abstract class RenewalTranslator<U> {
 		return Paths.get(r.getFileName()).toFile();
 	}
 	
-	private void saveFile(String name, String doc) {
-		System.out.println("DOC: " + doc);
-		try {
-			Files.write(Paths.get(OUTPUT_DIR + name), doc.getBytes(), new OpenOption[]{});
-		} catch (IOException e) {
-			throw new TestDBException("couldn't save file", e);
-		}
-	}	
-	
+	protected String getFileName(Form1 f, String fileName) {
+		StringBuilder sb = new StringBuilder();
+		sb.append(fileName);
+		sb.append("-");
+		sb.append("VRX");
+		sb.append("-");		
+		sb.append(f.getForm().getSection4().getVendor().getAdpVendorRegNo());
+		sb.append("-");
+		sb.append(Math.abs(random.nextInt()));//fake the edt ref #
+		sb.append("-");
+		sb.append(System.currentTimeMillis() / 1000L); //unix time stamp
+		sb.append(".xml");
+		return sb.toString();
+	}
+
 }

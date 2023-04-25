@@ -34,7 +34,7 @@ public abstract class RandomRenewalTranslator<U> extends RenewalTranslator<U> {
 		IntStream.range(0, r.getRandomRecords()).forEach( i -> {
 			populate(f, r);
 			String xml = marshall(f, r, i);
-			results.put(generateFileName(i, r.getFileName()), xml);
+			results.put(getFileName(f, i, r.getFileName()), xml);
 		});
 	}
 
@@ -93,7 +93,6 @@ public abstract class RandomRenewalTranslator<U> extends RenewalTranslator<U> {
 		JAXB.marshal(f, file);
 		try {
 			String content = new String(Files.readAllBytes(file.toPath()));
-			saveFile(r.getFileName(), content, i);
 			return content;
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -101,17 +100,8 @@ public abstract class RandomRenewalTranslator<U> extends RenewalTranslator<U> {
 		}
 	}    
    	
-	private String generateFileName(int i, String fileName) {
-		return "File" + i + "_" + fileName;
+	private String getFileName(Form1 f, int i, String fileName) {
+		return "File" + i + "-" + getFileName(f, fileName);
 	}
-	
-	protected void saveFile(String name, String doc, int i) {
-		System.out.println("DOC: " + doc);
-		try {
-			Files.write(Paths.get(OUTPUT_DIR + generateFileName(i, name)), doc.getBytes(), new OpenOption[]{});
-		} catch (IOException e) {
-			throw new TestDBException("couldn't save file", e);
-		}
-	}	
-	
+
 }
