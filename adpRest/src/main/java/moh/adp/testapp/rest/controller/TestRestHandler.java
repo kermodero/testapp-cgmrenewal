@@ -34,11 +34,6 @@ public class TestRestHandler {
 	public Logger logger;	
 	@Inject //TODO Remove this
 	public DummyDataService dummyData;
-	private Properties properties;
-	
-	//private String username = "adpadministrator1";
-	private String username = "adpnopayappv";
-	private String password = "Password2010$";
 	
 	public TestRestHandler() {
 		Properties.load();
