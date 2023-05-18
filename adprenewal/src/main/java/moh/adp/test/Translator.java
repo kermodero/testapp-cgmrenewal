@@ -4,7 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import moh.adp.test.translator.CATranslator;
+import moh.adp.test.translator.GMTranslator;
 import moh.adp.test.translator.METranslator;
+import moh.adp.xml.model.XmlForm;
 
 public class Translator {
 	private Map<DeviceCategory, DCTranslator<?,?>> dcTranslators;
@@ -16,6 +18,7 @@ public class Translator {
 
 	private void init() {
 		dcTranslators.put(DeviceCategory.CA,  new CATranslator ());
+		dcTranslators.put(DeviceCategory.GM,  new GMTranslator ());		
 	/*	dcTranslators.put(DeviceCategory.HD,  new HDTranslator ());
 		dcTranslators.put(DeviceCategory.DS,  new DSTranslator ());
 		dcTranslators.put(DeviceCategory.LP,  new LPTranslator ());
@@ -39,6 +42,10 @@ public class Translator {
 		dcTranslator.translate(t, u);
 	}
 
-
+	@SuppressWarnings("unchecked")
+	public <T, U> void translateRandom(DeviceCategory dc, T form, U claim) {
+		DCTranslator<T, U> dcTranslator = (DCTranslator<T, U>) dcTranslators.get(dc);
+		dcTranslator.translate(form, claim);		
+	}
 	
 }

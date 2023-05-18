@@ -10,6 +10,7 @@ public enum DeviceCategory {
 	CA, 
 	DSA,
 	DSC,
+	GM,
 	HD ,
 	LP ,	
 	MD ,	
@@ -32,8 +33,10 @@ public enum DeviceCategory {
 			break;
 		case DSC:
 			break;
+		case GM:
+			return DeviceCategoryConst.CATEGORY_GLUCOSE_MONITORING_ID;
 		case HD:
-			break;
+			break;			
 		case LP:
 			break;
 		case MD:

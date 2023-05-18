@@ -33,7 +33,7 @@ public abstract class RandomRenewalTranslator<U> extends RenewalTranslator<U> {
 		Form1 f = new Form1();
 		IntStream.range(0, r.getRandomRecords()).forEach( i -> {
 			populate(f, r);
-			String xml = marshall(f, r, i);
+			String xml = marshal(f, r, i);
 			results.put(getFileName(f, i, r.getFileName()), xml);
 		});
 	}
@@ -88,7 +88,7 @@ public abstract class RandomRenewalTranslator<U> extends RenewalTranslator<U> {
 		}
 	}
 	
-	private String marshall(Form1 f, RenewalRecord r, int i) {
+	private String marshal(Form1 f, RenewalRecord r, int i) {
 		File file = getFile(r);
 		JAXB.marshal(f, file);
 		try {

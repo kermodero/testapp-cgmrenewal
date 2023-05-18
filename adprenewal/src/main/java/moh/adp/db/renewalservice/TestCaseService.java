@@ -50,6 +50,40 @@ public class TestCaseService {
 		ExcelETL.importRecords(testName, description, directory,  em);
 	}
 	
+	public TestResult runGMRenewalRandom(String numberOfRecords, EntityManager em) {
+		try {
+			return runGMRenewalRandomDetails(numberOfRecords, em);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new TestResult(TestOutcome.TEST_APP_FAILURE, "e-Renewal test case. An error was encountered.");
+		}	
+	}
+		
+	private TestResult runGMRenewalRandomDetails(String numberOfRecords, EntityManager em) {
+		int numberOfClaims = Integer.parseInt(numberOfRecords);		
+		Map<String, String> eClaimXMLDocs = getCGMESubXMLs(numberOfClaims); 
+		Map<String, String> eRenewalXMLDocs = getCGMRenewalESubXMLs(eClaimXMLDocs); 
+		saveToSFTS(eClaimXMLDocs);
+		saveToSFTS(eRenewalXMLDocs);
+		return new TestResult(TestOutcome.EXPECTED_OUTCOME, "Ran renewal random details.");
+	}
+
+	private Map<String, String> getCGMRenewalESubXMLs(Map<String, String> eClaimXMLDocs) {
+		Map<String, String> renewals = new HashMap<>();
+		eClaimXMLDocs.forEach( (f, c) -> {
+			
+		});		
+		return renewals;
+	}
+
+	private Map<String, String> getCGMESubXMLs(int numberOfClaims) {
+		Map<String, String> claims = new HashMap<>();
+		for (int i=0; i<numberOfClaims; i++) {
+			
+		}			
+		return claims;
+	}
+
 	public TestResult runGMRenewalTestCase(String testCase, EntityManager em) {
 		try {
 			return runGMRenewalTestCaseDetails(testCase, em);
@@ -110,7 +144,5 @@ public class TestCaseService {
 							.getSingleResult();
 		return te.getTestSets();
 	}
-	
-	// https://stackoverflow.com/questions/11693552/java-code-to-xml-xsd-without-using-annotation
 	
 }

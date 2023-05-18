@@ -122,6 +122,8 @@ public abstract class SectionTranslator {
 	protected <W, X> W translatePart(Class<W> beanClass,  X x) {
 		try {
 			W w = beanClass.getConstructor().newInstance();
+			if (x == null)
+				return w;
 			Map<String, List<String>> fields = beanFields.get(beanClass);
 			if (fields == null)
 				return null;  //TODO should this be an exception - should this ever be correct?

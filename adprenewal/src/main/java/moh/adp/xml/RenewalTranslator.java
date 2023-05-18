@@ -42,7 +42,7 @@ public abstract class RenewalTranslator<U> {
 	public void translate(RenewalRecord r, Map<String, String> results) {
 		Form1 f = new Form1();
 		populate(f, r);
-		String xml = marshall(f, r);
+		String xml = marshal(f, r);
 		results.put(getFileName(f, r.getFileName()), xml);
 	}
 	
@@ -59,7 +59,7 @@ public abstract class RenewalTranslator<U> {
 
 	protected abstract void populateSection2(Form f, RenewalRecord r);
 
-	private String marshall(Form1 f, RenewalRecord r) {
+	private String marshal(Form1 f, RenewalRecord r) {
 		File file = getFile(r);
 		JAXB.marshal(f, file);
 		try {

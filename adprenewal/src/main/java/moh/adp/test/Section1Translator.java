@@ -47,7 +47,7 @@ public class Section1Translator <T, U> extends SectionTranslator {
 
 	protected void translateSection(Claim claim, XmlForm form){
 		Section1 s1 = form.getSection1();
-		s1.setVersionNo("1234"); //TODO
+		s1.setVersionNo("202301"); //TODO
 		s1.setConfirmationOfBenefit(new ConfirmationOfBenefit());
 		populateAll(Section1.class, claim, s1);
 		translateConfirmationOfBenefit(claim, s1.getConfirmationOfBenefit());

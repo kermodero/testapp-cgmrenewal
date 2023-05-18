@@ -65,6 +65,12 @@ public class ADAMServer {
 	    TestResult tr = TestCaseService.instance().runGMRenewalTestCase(testId, em);
 		return new Result(tr.getMessage() + " " + tr.getOutcome(), Result.Outcome.UNKNOWN);
 	}
+	
+	public Result runRenewalRandom(String numberOfRecords) {
+	    logger.debug("running renewal random ");
+	    TestResult tr = TestCaseService.instance().runGMRenewalRandom(numberOfRecords, em);
+		return new Result(tr.getMessage() + " " + tr.getOutcome(), Result.Outcome.UNKNOWN);
+	}	
 
 /*	public Result runNightlyBatchDirectly(TestScope ts, String testId) {
 		logger.debug("running regression for " + ts.name());
