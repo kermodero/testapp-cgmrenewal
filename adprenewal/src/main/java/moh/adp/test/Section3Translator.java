@@ -3,8 +3,10 @@ package moh.adp.test;
 
 
 import moh.adp.model.claim.Claim;
+import moh.adp.model.claim.ClaimSignature;
 import moh.adp.xml.model.XmlForm;
 import moh.adp.xml.model.common.Section3;
+import moh.adp.xml.model.common.Section3.Sig;
 
 
 public class Section3Translator <T, U> extends SectionTranslator {
@@ -24,6 +26,7 @@ public class Section3Translator <T, U> extends SectionTranslator {
 		Section3.Sig sig = new Section3.Sig();
 		s3.setSig(sig);
 		setPayee(claim, sig);
+		setPerson(claim, sig);
 		populateAll(Section3.Sig.class, claim, sig);		
 
 	}
@@ -35,7 +38,7 @@ public class Section3Translator <T, U> extends SectionTranslator {
 
 	private void initSig() {
 		//addField(Section3.Sig.class, "signature" , "consentSignature", "??"); //?? 
-		addField(Section3.Sig.class, "person"	 , "consentSignature", "fullName");
+//		addField(Section3.Sig.class, "person"	 , "consentSignature", "fullName");
 		addField(Section3.Sig.class, "date"      , "consentSignature", "signedDate");
 	}
 
@@ -80,5 +83,11 @@ public class Section3Translator <T, U> extends SectionTranslator {
 			return;
 		sig.setPayee(claim.isPayeeApplicant() ? "Applicant" : (claim.isPayeeAgent() ? "Agent" : claim.isPayeeLtcHome()? "LTCH" : null));		
 	}
+
+	private void setPerson(Claim claim, Section3.Sig sig) {
+		ClaimSignature cs = claim.getConsentSignature();
+		sig.setPerson(cs.isClientSigned()? "Applicant" : "Agent");				
+	}
+
 
 }

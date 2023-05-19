@@ -144,5 +144,10 @@ public class TestCaseService {
 							.getSingleResult();
 		return te.getTestSets();
 	}
+
+	public TestResult createRandom(String deviceCategory, int numberOfClaims, EntityManager em) {
+		
+		return null;
+	}
 	
 }

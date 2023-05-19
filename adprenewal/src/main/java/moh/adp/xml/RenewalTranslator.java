@@ -63,9 +63,7 @@ public abstract class RenewalTranslator<U> {
 		File file = getFile(r);
 		JAXB.marshal(f, file);
 		try {
-			String content = new String(Files.readAllBytes(file.toPath()));
-//			saveFile(r.getFileName(), content);
-			return content;
+			return new String(Files.readAllBytes(file.toPath()));
 		} catch (IOException e) {
 			e.printStackTrace();
 			throw new TestDBException("Exception marshalling file", e);
@@ -87,6 +85,7 @@ public abstract class RenewalTranslator<U> {
 		section1.setDateOfBirth(sdf.format(c.getDateOfBirth()));
 		section1.setHealthNo(r.getHealthNumber());
 		section1.setVersionNo(r.getFormVersion());
+		//confirmation of benefit?
 	}
 
 	protected void populateSection3(Form f, RenewalRecord r) {

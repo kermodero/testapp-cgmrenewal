@@ -11,7 +11,6 @@ import moh.adp.model.client.RpdbClient;
 import moh.adp.model.message.OutcomeMessage;
 import moh.adp.server.claim.ClaimParsingService;
 import moh.adp.server.lookup.RpdbClientLookupService;
-import moh.adp.test.Result;
 
 @Singleton
 public class BusinessRuleTest {

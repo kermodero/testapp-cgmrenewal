@@ -1,6 +1,6 @@
 package moh.adp.test;
 
-import moh.adp.test.Result;
+
 
 public class TestSuiteRunner {
 
@@ -9,9 +9,5 @@ public class TestSuiteRunner {
 		return null;
 	}
 
-	public Result generate() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 }

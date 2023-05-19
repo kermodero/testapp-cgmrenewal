@@ -29,4 +29,9 @@ public interface RandomQueries {
 			"WHERE VENDOR_REVIEW_REASON_CD IS NULL  " +
 			"AND rownum = 1  ";
 	
+	String RANDOM_PHYSICIAN_ID = 
+			"SELECT    " +
+			"FROM  sample(1)   " +
+			"WHERE  IS NULL  " +
+			"AND rownum = 1  ";	
 }

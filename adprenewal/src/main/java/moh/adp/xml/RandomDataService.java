@@ -40,6 +40,10 @@ public class RandomDataService implements RandomQueries {
 	public Long getRandomVendor() {
 		return getOneValue(RANDOM_VENDOR_ID, BigDecimal.class).longValue();
 	}
+
+	public String getRandomPhysician() {
+		return getOneValue(RANDOM_PHYSICIAN_ID, String.class);
+	}
 	
 	private <T> T getOneValue(String sql, Class<T> classT) {
 		try {
@@ -69,5 +73,6 @@ public class RandomDataService implements RandomQueries {
 		}
 		return adpDS;
 	}
+
 
 }

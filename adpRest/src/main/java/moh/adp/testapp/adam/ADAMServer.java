@@ -72,6 +72,12 @@ public class ADAMServer {
 		return new Result(tr.getMessage() + " " + tr.getOutcome(), Result.Outcome.UNKNOWN);
 	}	
 
+	public Result createRandomClaims(String deviceCategory, int numberOfClaims) {
+	    logger.debug("creating " + numberOfClaims + " random claims of device category " + deviceCategory);
+	    TestResult tr = TestCaseService.instance().createRandom(deviceCategory, numberOfClaims, em);
+		return new Result(tr.getMessage() + " " + tr.getOutcome(), Result.Outcome.UNKNOWN);
+	}		
+	
 /*	public Result runNightlyBatchDirectly(TestScope ts, String testId) {
 		logger.debug("running regression for " + ts.name());
 		Result result = new Result();

@@ -8,6 +8,7 @@ import moh.adp.model.party.vendor.VendorView;
 import moh.adp.xml.model.XmlForm;
 import moh.adp.xml.model.common.Authorizer;
 import moh.adp.xml.model.common.ClinicInfo;
+import moh.adp.xml.model.common.DiabetesProgram;
 import moh.adp.xml.model.common.NoteToADP;
 import moh.adp.xml.model.common.Physician;
 import moh.adp.xml.model.common.Section4;
@@ -45,7 +46,7 @@ public class Section4Translator<T, U> extends SectionTranslator {
 		s4.setTherapist(translatePart(Therapist.class, claim.getClaimRespiratoryTherapist()));
 //??	s4.setRehabilitationAssessor(translatePart(RehabilitationAssessor.class, claim.get, new RehabilitationAssessor()));
 		//s4.setPrescriber(translatePart(Prescriber.class, new Prescriber()));
-	//	s4.setDiabetesProgram(translatePart(DiabetesProgram.class, claim, new DiabetesProgram()));
+		s4.setDiabetesProgram(translatePart(DiabetesProgram.class, claim.getClaimClinic()));
 //		s4.setNoteToADP(translatePart(NoteToADP.class, claim, new NoteToADP()));
 //		s4.setAudiologist(translatePart(Audiologist.class, claim, new Audiologist()));
 		populateVendor(claim.getClaimVendor(), s4.getVendor());
@@ -108,6 +109,7 @@ public class Section4Translator<T, U> extends SectionTranslator {
 	}
 
 	private void initDiabetesProgram(){
+		addField(DiabetesProgram.class, "adpClinicNo",	"regNum");	//See moh.adp.xml.model.common.DiabetesProgram: case of field name may cause problems.
 	}
 
 	private void initNoteToADP(){
