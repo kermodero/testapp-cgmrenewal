@@ -42,9 +42,9 @@ public class RandomDataService implements RandomQueries {
 	}
 
 	public String getRandomPhysician() {
-		return getOneValue(RANDOM_PHYSICIAN_ID, String.class);
+		return getOneValue(RANDOM_PHYSICIAN_ID, String.class).trim();
 	}
-	
+
 	private <T> T getOneValue(String sql, Class<T> classT) {
 		try {
 			PreparedStatement ps = getStatement(sql);
@@ -55,7 +55,7 @@ public class RandomDataService implements RandomQueries {
 			throw new TestDBException("Failed to run query: " + sql, e);
 		}
 	}
-
+	
 	private PreparedStatement getStatement(String sql) throws SQLException {
 		return getAdpDataSource().getConnection().prepareStatement(sql);
 	}
@@ -73,6 +73,5 @@ public class RandomDataService implements RandomQueries {
 		}
 		return adpDS;
 	}
-
 
 }

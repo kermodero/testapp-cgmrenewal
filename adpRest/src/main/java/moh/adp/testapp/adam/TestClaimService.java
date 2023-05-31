@@ -1,34 +1,7 @@
 package moh.adp.testapp.adam;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
-import moh.adp.common.DeviceCategory;
-import moh.adp.common.exception.AdpException;
-/*import moh.adp.db.model.ClaimRecord;
-import moh.adp.db.model.RecordSet;
-import moh.adp.db.model.Test;
-import moh.adp.db.model.TestSet;*/
-import moh.adp.model.claim.Claim;
-/*
-import moh.adp.server.claim.ClaimSignatureHelper;
-import moh.adp.server.claim.ClientAgentHelper;
-import moh.adp.server.esubmission.xml.parser.shared.ParsedRegNo;
-import moh.adp.server.esubmission.xml.parser.shared.SignaturesParser;
-import moh.adp.server.lookup.RpdbClientLookupService;
-import moh.adp.server.party.authorizer.AuthorizerHelper;
-import moh.adp.server.party.clinic.ClinicHelper;
-import moh.adp.server.party.prescriber.PhysicianFinder;
-import moh.adp.server.party.vendor.VendorHelper;
-import moh.adp.service.client.ClientService;
-import moh.adp.service.claim.ClaimService;
-import moh.adp.service.claim.ClaimServiceImpl;
-import moh.adp.service.client.ClientServiceImpl;
-*/
-import moh.adp.testapp.util.ADAMTestException;
 import moh.adp.testapp.util.DummyDataService;
 
 

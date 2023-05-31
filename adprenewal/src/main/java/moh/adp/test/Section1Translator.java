@@ -18,7 +18,6 @@ public class Section1Translator <T, U> extends SectionTranslator {
 		addField(Section1.class, "applicantMiddleinitial", "claimClient", "middleName");
 		addField(Section1.class, "healthNo",            "claimClient", "healthNumber");
 		addField(Section1.class, "dateOfBirth",         "claimClient", "dateOfBirth");
-		addField(Section1.class, "sex",                 "claimClient", "gender");		
 		addField(Section1.class, "nameLTCH", 		    "claimClient", "mailingAddress", "longTermCareHomeName");
 		addField(Section1.class, "unitNo", 			    "claimClient", "mailingAddress", "unitNum");
 		addField(Section1.class, "streetNo",  		    "claimClient", "mailingAddress", "streetNum");
@@ -41,8 +40,8 @@ public class Section1Translator <T, U> extends SectionTranslator {
 		addBooleanField(ConfirmationOfBenefit.class, "q3Yn",	 "vacEligible");
 		//		"q4" is set below.
 		//		"q4Ifyes" is set below.
-		addBooleanField(ConfirmationOfBenefit.class, "q5Yn",	 "hospitalResident");
-		addBooleanField(ConfirmationOfBenefit.class, "q6Yn",     "formCcac"); 		
+		//addBooleanField(ConfirmationOfBenefit.class, "q5Yn",	 "hospitalResident");
+		//addBooleanField(ConfirmationOfBenefit.class, "q6Yn",     "formCcac"); 		
 	}
 
 	protected void translateSection(Claim claim, XmlForm form){
@@ -58,7 +57,7 @@ public class Section1Translator <T, U> extends SectionTranslator {
 		String q1IfYes = claim.isOwp() ? "OWP" : (claim.isOdsp()? "ODSP" : (claim.isAcsd() ? "ACSD" : ""));
 		confirmationOfBenefit.setQ1Ifyes(q1IfYes);
 		
-		//q4IfYes
+/*		//q4IfYes
 		if (claim.isDeviceCategoryMaxIntraoral()) {
 			if (claim.isOmrpEligible()) {
 				confirmationOfBenefit.setQ4Yn(XMLParserConsts.YES);
@@ -71,7 +70,7 @@ public class Section1Translator <T, U> extends SectionTranslator {
 
 		//q4
 		String q4 = claim.isOwp() ? "OWP" : (claim.isOdsp()? "ODSP" : (claim.isAcsd() ? "ACSD" : ""));
-		confirmationOfBenefit.setQ4Ifyes(q4);
+		confirmationOfBenefit.setQ4Ifyes(q4);*/
 		
 		populateAll(ConfirmationOfBenefit.class, claim, confirmationOfBenefit);				
 	}

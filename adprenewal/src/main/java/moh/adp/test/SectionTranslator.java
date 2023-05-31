@@ -1,6 +1,6 @@
 package moh.adp.test;
 
-import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import moh.adp.model.claim.Claim;
 import moh.adp.test.conversion.FieldCopy;
+import moh.adp.xml.model.gm.v202301.GMForm1;
 
 public abstract class SectionTranslator {
 
@@ -71,7 +72,6 @@ public abstract class SectionTranslator {
 	}
 
 	private String asGetter(String propName) {
-		System.out.println("got getter " + "get" + StringUtils.capitalize(propName));
 		return "get" + StringUtils.capitalize(propName);
 	}
 
@@ -161,5 +161,71 @@ public abstract class SectionTranslator {
 		populateAll(clazz, claim, getter, w);		
 		return w;
 	}
-		
+
+	protected <U> void nullsToEmptyObjects(U u) {
+		try {
+			nullsToEmpties(u);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	protected <U> void nullsToEmpties(U u) throws Exception {
+		for (Method m : u.getClass().getDeclaredMethods()) {
+			if (!m.getName().startsWith("get") || m.getParameterCount() > 0)
+				continue;
+			processGetter(m, u);
+		}
+	}
+
+	private <U> void processGetter(Method m, U u) throws Exception {
+		Object o = m.invoke(u);
+		if (o == null)
+			processNull(m, u);
+		else
+			nullsToEmptyObjects(o);		
+	}
+
+	private <U> void processNull(Method m, U u ) throws Exception {
+		Method setter = getSetter(m, u);
+		if (setter == null || setter.getName().startsWith("setQ")) //TODO way too crude!
+			return;
+		Class<?> clazz = m.getReturnType();		
+		Object obj = clazz.newInstance();
+		setter.invoke(u, new Object[]{obj});		
+		if (clazz.getPackage().getName().startsWith("moh"))
+			nullsToEmptyObjects(obj); //recur
+	}
+
+	private <U> Method getSetter(Method getter, U u) {
+		String setter = getter.getName();
+		setter = "s" + setter.substring(1);
+		try {
+			return u.getClass().getDeclaredMethod(setter, new Class<?>[]{getter.getReturnType()});
+		} catch (NoSuchMethodException | SecurityException e) {
+			return null;
+		}
+	}
+	
+	protected void unsex(GMForm1 form) {
+		form.getSection1().setSex(null);
+	}
+	
+	protected void removeNonGM(GMForm1 form) {
+		form.getSection3().getSig().setPayee(null);
+		form.getSection4().setPrescriber(null);
+		form.getSection4().setAuthorizer(null);
+		form.getSection4().setClinicInfo(null);
+		form.getSection4().setVendor2(null);
+		form.getSection4().setRehabilitationAssessor(null);
+		form.getSection4().setTherapist(null);
+        form.getSection4().setEquipmentSpec   (null);
+        form.getSection4().setProofOfDelivery (null);
+        form.getSection4().setPagesAttachments(null);
+        form.getSection4().setNoteToADP       (null);
+        form.getSection4().setAudiologist     (null);	
+        form.getSection4().getVendor().setInvoiceNo(null);
+        form.getSection4().getVendor().setNonRegisterVendor(null);
+	}
+	
 }

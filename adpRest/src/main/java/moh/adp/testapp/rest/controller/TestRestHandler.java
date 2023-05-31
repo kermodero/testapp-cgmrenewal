@@ -32,7 +32,7 @@ public class TestRestHandler {
 	public ADAMServer adamServer;	
 	@Inject
 	public Logger logger;	
-	@Inject //TODO Remove this
+	@Inject
 	public DummyDataService dummyData;
 	
 	public TestRestHandler() {
@@ -56,6 +56,14 @@ public class TestRestHandler {
 		return adamServer.runRenewal(testId);
 	}
 
+	@GET
+	@Path("/renewal/random/{deviceCategory}/{count}")
+	public Result run(@PathParam("deviceCategory") String deviceCategory, @PathParam("count") String count) throws Exception {
+		logger.debug("renewal/random, category: " + deviceCategory + ", count: " + count);
+		login();
+		return adamServer.createRandomRenewals(deviceCategory, Integer.parseInt(count));
+	}	
+	
 	@GET
 	@Path("/claim/create/{testName}")
 	public Result createClaims(@PathParam("testName") String testName) throws Exception {

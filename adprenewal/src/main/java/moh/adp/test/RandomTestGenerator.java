@@ -3,7 +3,6 @@ package moh.adp.test;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
 import java.util.Random;
@@ -14,8 +13,6 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
-import org.apache.commons.lang3.tuple.MutablePair;
-import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
 
 import moh.adp.db.common.TestDBException;
@@ -43,9 +40,6 @@ public class RandomTestGenerator {
 	public void generate(String deviceCategory, Map<String, String> results, int fileNumber) throws JAXBException {
 		DeviceCategory dc = DeviceCategory.valueOf(deviceCategory);
 		Triple<Marshaller, XmlForm, ? extends Claim> jaxb = getJaxbRequirements(dc);
-		
-		//randomize (populate) the claim!
-		
 		translator.translateRandom(dc, jaxb.getRight(), jaxb.getMiddle());
 		String xml = marshal(jaxb.getLeft(), jaxb.getMiddle());
 		String fileName = dc + "Test" + fileNumber;

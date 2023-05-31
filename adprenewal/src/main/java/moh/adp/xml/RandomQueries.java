@@ -8,6 +8,7 @@ public interface RandomQueries {
 			"AND CLIENT_REVIEW_REASON_CD IS NULL   " +
 			"AND BIO_INFO_REVIEW_REQUIRED_IND = 'N'" +
 			"AND REVIEW_REQUESTER_ROLE_CD IS NULL  " +
+			"AND HEALTH_NUMBER IS NOT NULL         " +
 			"AND rownum = 1                        ";
 
 	String RANDOM_HEALTH_NUM_WITH_GM_CLAIM = "";
@@ -25,13 +26,17 @@ public interface RandomQueries {
 	
 	String RANDOM_GM_VENDOR_ID = 
 			"SELECT vendor_id   " +
-			"FROM vendor sample(1)   " +
-			"WHERE VENDOR_REVIEW_REASON_CD IS NULL  " +
+			"FROM vendor sample(1)   " + //INNER JOIN blah blah to get only GM vendors.
+			"WHERE VENDOR_REVIEW_REASON_CD IS NULL  " + 
 			"AND rownum = 1  ";
 	
 	String RANDOM_PHYSICIAN_ID = 
-			"SELECT    " +
-			"FROM  sample(1)   " +
-			"WHERE  IS NULL  " +
-			"AND rownum = 1  ";	
+			"WITH DOCS AS (SELECT a.registration_num     " + 
+			"FROM authorizer a				 			 " +
+			"INNER JOIN authorizer_registration ar		 " +
+			"ON a.authorizer_id = ar.authorizer_id		 " +
+			"WHERE ar.profession_code_id = 21		 	 " + //21 is MD CODE.
+			"ORDER BY DBMS_RANDOM.RANDOM) 			 	 " +
+			"SELECT * FROM DOCS WHERE rownum = 1"; 
+
 }

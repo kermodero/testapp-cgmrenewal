@@ -15,14 +15,6 @@ import moh.adp.db.renewalservice.TestResult;
 import moh.adp.testapp.rest.common.Result;
 import moh.adp.testapp.rest.common.TestScope;
 
-/*import moh.adp.db.model.ClaimRecord;
-import moh.adp.db.model.RecordSet;
-import moh.adp.db.model.Test;
-import moh.adp.db.model.TestSet;
-import moh.adp.db.service.TestCaseService;
-import moh.adp.testapp.rest.common.Result;
-import moh.adp.testapp.rest.common.Result.Outcome;
-import moh.adp.testapp.rest.common.TestScope;*/
 
 @Singleton
 public class ADAMServer {
@@ -46,18 +38,7 @@ public class ADAMServer {
 	}
 
 	public Result runNightlyBatchDirectly(TestScope ts, String testId) {
-		// TODO Auto-generated method stub
 		return null;
-	}
-
-	public void createClaims(Result r, String testName) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void runETL(Result r, String directory, String testName) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	public Result runRenewal(String testId) {
@@ -72,116 +53,26 @@ public class ADAMServer {
 		return new Result(tr.getMessage() + " " + tr.getOutcome(), Result.Outcome.UNKNOWN);
 	}	
 
-	public Result createRandomClaims(String deviceCategory, int numberOfClaims) {
+/*	public Result createRandomClaims(String deviceCategory, int numberOfClaims) {
 	    logger.debug("creating " + numberOfClaims + " random claims of device category " + deviceCategory);
 	    TestResult tr = TestCaseService.instance().createRandom(deviceCategory, numberOfClaims, em);
 		return new Result(tr.getMessage() + " " + tr.getOutcome(), Result.Outcome.UNKNOWN);
-	}		
-	
-/*	public Result runNightlyBatchDirectly(TestScope ts, String testId) {
-		logger.debug("running regression for " + ts.name());
-		Result result = new Result();
-		result.setOutcome(Outcome.SUCCESS);
-		switch (ts) {
-		case ALL:
-			runAll(result, testId);
-			break;
-		case CCAC:
-			break;
-		case ECLAIM:
-			runEClaim(result, testId);
-			break;
-		case INVOICE:
-			break;
-		case OXYGEN:
-			break;
-		case PAYMENT:
-			runPayment(result, testId);
-			break;
-		case RENEWAL:
-			break;
-		case INVALID:
-			result.setOutcome(Outcome.INVALID_TEST);
-			result.setMessage("Unrecognized test");
-			break;			
-		default:
-			result.setOutcome(Outcome.INVALID_TEST);
-			result.setMessage("Unknown test");
-			break;		
-		}
-		return result;
+	}*/
+
+	public Result createRandomRenewals(String deviceCategory, int count) {
+	    logger.debug("creating " + count + " random claims of device category " + deviceCategory);
+	    TestResult tr = TestCaseService.instance().createRandom(deviceCategory, count, em);
+		return new Result(tr.getMessage() + " " + tr.getOutcome(), Result.Outcome.UNKNOWN);
 	}
 
-	public void runPayment(Result r, String testId) {
-//		ProcessAdminBatchService service = new ProcessAdminBatchService();
-		try {
-			service.runPaymentBatchProcess();
-		} catch (Exception e) {
-			r.setMessage("Payment Batch failed " + e.getMessage());
-			r.setOutcome(Outcome.ERROR);
-		}
-		r.setMessage("Payment Batch successful." );
-	}
-	
-	public void runEClaim(Result r, String testId) {
-		try {
-			testDataService.prepareEClaimTest(testId);
-//			EClaimBatchService.initSFTPConnection();
-//			EClaimBatchService.loadEClaimFiles();
-//			EClaimBatchService.processEClaimFiles();
-		} catch (Exception e) {
-			r.setMessage("ESubmission Batch failed " + e.getMessage());
-			r.setOutcome(Outcome.ERROR);
-		}
-		r.setMessage("E-claim Batch successful." );
-	}
-
-	public void runAll(Result r, String testId) {
-		try {
-			testDataService.prepareAll(testId);
-			ProcessAdminBatchService pabService = new ProcessAdminBatchService();
-			pabService.runRenewalBatchProcess();
-			pabService.runInvoiceBatchProcess();
-			pabService.runPaymentBatchProcess();
-			pabService.runHomeOxygenBatchProcess();
-			pabService.runCcacUploadBatchProcess();
-			runEClaim(r, testId);			
-		} catch (Exception e) {
-			r.setMessage("Full nightly Batch failed " + e.getMessage());
-			r.setOutcome(Outcome.ERROR);
-		}
-		r.setMessage("Payment Batch successful." );
-	}
-
-	public void createClaims(Result r, String testId) {
-		claimService = new TestClaimService();
-		try {
-			Test test = testCaseService.getTestCase("GENERIC_CLAIM", em);
-			for (TestSet ts : test.getTestSets())
-				for (RecordSet rs : ts.getRecordSets())
-					for (ClaimRecord cr : rs.getClaimRecords()) {
-						claimService.createOne(cr);						
-					}
-			r.setMessage("Claim creation succeeded");
-			r.setOutcome(Outcome.SUCCESS);			
-		} catch (Exception e) {
-			r.setMessage("Claim creation failed " + e.getMessage());
-			r.setOutcome(Outcome.ERROR);			
-		}
+	public void createClaims(Result r, String testName) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	public void runETL(Result r, String directory, String testName) {
-		try {
-			userTransaction.begin();
-			testCaseService.runETL(directory, testName, em);
-			userTransaction.commit();
-		} catch (Exception e) {
-			r.setMessage("ETL failed " + e.getMessage());
-			r.setOutcome(Outcome.ERROR);
-			e.printStackTrace();
-		}
-		r.setMessage("ETL completed." );
-		r.setOutcome(Outcome.SUCCESS);
-	}
-	*/
+		// TODO Auto-generated method stub
+		
+	}		
+	
 }

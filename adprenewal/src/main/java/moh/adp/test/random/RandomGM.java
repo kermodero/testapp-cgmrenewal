@@ -2,13 +2,23 @@ package moh.adp.test.random;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
 import moh.adp.db.common.TestDBException;
 import moh.adp.model.claim.form.ClaimGlucoseMonitor;
-import moh.adp.server.esubmission.xml.parser.util.XMLParserConsts;
+
 
 public class RandomGM extends RandomClaim<ClaimGlucoseMonitor> {
 
+	public static List<ClaimGlucoseMonitor> generateGM(int count) {
+		RandomGM rgm = new RandomGM();
+		List<ClaimGlucoseMonitor> claims = new ArrayList<>();		
+		for (int i=0; i<count; i++)
+			claims.add(rgm.generate());
+		return claims;
+	}
+	
 	@Override
 	public ClaimGlucoseMonitor generate() {
 		ClaimGlucoseMonitor cg = new ClaimGlucoseMonitor();
@@ -30,20 +40,18 @@ public class RandomGM extends RandomClaim<ClaimGlucoseMonitor> {
 	}
 	
 	private void setQuestion(ClaimGlucoseMonitor cg, String method) {
-		//set them all to YES
-		setProperty(cg, "is" + method + "Yes", XMLParserConsts.YES);
+		//just set them all to YES
+		setProperty(cg, "set" + method + "Yes", Boolean.TRUE);
 	}
 
-	private void setProperty(ClaimGlucoseMonitor conf, String setterName, String val) {
+	private void setProperty(ClaimGlucoseMonitor conf, String setterName, Boolean val) {
 		try {
-			Method method = ClaimGlucoseMonitor.class.getMethod(setterName, String.class);
+			Method method = ClaimGlucoseMonitor.class.getMethod(setterName, boolean.class);
 			method.invoke(conf, val);
 		} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			e.printStackTrace();
 			throw new TestDBException("Exception translating GM Claim", e);
 		}	
 	}
-
-
 
 }

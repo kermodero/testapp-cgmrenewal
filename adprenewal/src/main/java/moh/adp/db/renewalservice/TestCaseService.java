@@ -1,15 +1,22 @@
 package moh.adp.db.renewalservice;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.nio.file.Files;
 import java.nio.file.OpenOption;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
+import javax.xml.bind.JAXB;
+
+import org.apache.commons.lang3.tuple.Pair;
 
 import moh.adp.db.common.TestDBException;
 import moh.adp.db.common.TestOutcome;
@@ -19,13 +26,19 @@ import moh.adp.db.jpa.RenewalRecord;
 import moh.adp.db.jpa.TestEntity;
 import moh.adp.db.jpa.TestSet;
 import moh.adp.db.model.Test;
+import moh.adp.model.claim.Claim;
+import moh.adp.model.claim.form.ClaimGlucoseMonitor;
+import moh.adp.test.random.RandomClaimGenerator;
+import moh.adp.test.translator.GMTranslator;
 import moh.adp.xml.RenewalTranslator;
 import moh.adp.xml.RenewalTranslatorFactory;
+import moh.adp.xml.model.gm.v202301.GMForm1;
 
 //Old fashioned singleton because 
 //injection is too convoluted
 public class TestCaseService {
 	private static TestCaseService tcs;
+	private RandomClaimGenerator randomClaimGenerator = new RandomClaimGenerator();
 	
 	private TestCaseService(){		
 	}
@@ -49,7 +62,36 @@ public class TestCaseService {
 		String description = testName + " data extracted from Excel sheet.";
 		ExcelETL.importRecords(testName, description, directory,  em);
 	}
-	
+
+	public TestResult createRandom(String deviceCategory, int numberOfClaims, EntityManager em) {
+		try {
+			GMTranslator gmTranslator = new GMTranslator(); //TODO fix this!
+			Map<String, String> eClaimXMLDocs = new HashMap<>();
+			List<Claim> claims = randomClaimGenerator.generateClaims(deviceCategory, numberOfClaims);
+			AtomicInteger i=new AtomicInteger(0);
+			claims.forEach(c -> {
+				Pair<String, GMForm1> form = gmTranslator.translate((ClaimGlucoseMonitor)c, "GM-Test" + i.getAndIncrement());
+				eClaimXMLDocs.put(form.getLeft(), marshal(form.getRight()));
+			});
+			saveToSFTS(eClaimXMLDocs);				
+			return new TestResult(TestOutcome.EXPECTED_OUTCOME, "");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new TestResult(TestOutcome.TEST_APP_FAILURE, "");
+		}
+	}
+
+	private <U> String marshal(U f) {
+		StringWriter xml = new StringWriter();
+		JAXB.marshal(f, xml);
+		return xml.toString();
+	}    
+    	
+	protected File getTempFile() {
+		UUID uid = UUID.randomUUID();
+		return Paths.get("C:/TEMP/" + uid).toFile();
+	}
+
 	public TestResult runGMRenewalRandom(String numberOfRecords, EntityManager em) {
 		try {
 			return runGMRenewalRandomDetails(numberOfRecords, em);
@@ -145,9 +187,4 @@ public class TestCaseService {
 		return te.getTestSets();
 	}
 
-	public TestResult createRandom(String deviceCategory, int numberOfClaims, EntityManager em) {
-		
-		return null;
-	}
-	
 }

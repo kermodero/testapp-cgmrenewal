@@ -42,6 +42,14 @@ public class Translator {
 		dcTranslator.translate(t, u);
 	}
 
+/*	@SuppressWarnings("unchecked")
+	public <T,U> U translate(DeviceCategory dc, T t) {
+		DCTranslator<T, U> dcTranslator = (DCTranslator<T, U>) dcTranslators.get(dc);
+		
+		dcTranslator.translate(t, u);
+	}*/
+	
+	
 	@SuppressWarnings("unchecked")
 	public <T, U> void translateRandom(DeviceCategory dc, T form, U claim) {
 		DCTranslator<T, U> dcTranslator = (DCTranslator<T, U>) dcTranslators.get(dc);

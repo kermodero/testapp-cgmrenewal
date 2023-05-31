@@ -93,7 +93,7 @@ public class Section4Translator<T, U> extends SectionTranslator {
 		//addField(Vendor.class, "positionTitle",	 "");
 		addField(Vendor.class, "busPhone", "phone", "phoneNum");
 		addField(Vendor.class, "phoneExtension", "phone", "extension");		
-		addField(Vendor.class, "vendorLocation", "address", "addressDisplay");
+		addField(Vendor.class, "vendorLocation", "address", "municipalityKey");
 		//addField(Vendor.class, "signature",	 "");
 		addField(Vendor.class, "date",		 "lastAllowableInvoiceDate");
 		//addField(Vendor.class, "invoiceNo",	 "");

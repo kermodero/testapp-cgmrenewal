@@ -14,7 +14,7 @@ import moh.adp.model.claim.ClientAgent;
 import moh.adp.model.client.Client;
 import moh.adp.model.party.authorizer.AuthorizerView;
 import moh.adp.model.party.prescriber.PhysicianView;
-import moh.adp.model.party.vendor.Vendor;
+import moh.adp.model.party.vendor.VendorView;
 import moh.adp.service.authorizer.AuthorizerService;
 import moh.adp.service.authorizer.AuthorizerServiceImpl;
 import moh.adp.service.client.ClientService;
@@ -39,6 +39,7 @@ public abstract class RandomClaim<U extends Claim> {
 		populateClient(claim);
 		populateClientAgent(claim);
 		populatePhysician(claim);
+		populateVendor(claim);
 	}
 
 	private void populatePhysician(Claim claim) {
@@ -57,7 +58,11 @@ public abstract class RandomClaim<U extends Claim> {
 		claim.setClientAgent(getClientAgent());
 		claim.setConsentSignature(getClaimSignature(CodeValueConsts.SIGNATURE_TYPE_CONSENT_CD));
 	}
-	
+
+	private void populateVendor(Claim claim) {
+		claim.setClaimVendor(getVendor());
+	}
+
 	private ClaimSignature getClaimSignature(Long signatureType) {
 		ClaimSignature cs = new ClaimSignature(signatureType);
 		cs.setSignedDate(getDate(-5));
@@ -99,11 +104,11 @@ public abstract class RandomClaim<U extends Claim> {
 		}			
 	}
 	
-	protected Vendor getVendor() {
+	protected VendorView getVendor() {
 		try {
 			Long id = RandomDataService.instance().getRandomVendor();		
 			VendorService vs = new VendorServiceImpl();		
-			return vs.getVendor(id);
+			return vs.getVendorView(id);
 		} catch (AdpException e) {
 			e.printStackTrace();
 			throw new TestDBException("error getting vendor " + e.getMessage(), e);
