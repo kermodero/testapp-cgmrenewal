@@ -3,7 +3,6 @@ package moh.adp.xml;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.OpenOption;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Map;
@@ -19,6 +18,7 @@ import moh.adp.model.claim.ClientAgent;
 import moh.adp.model.client.Client;
 import moh.adp.model.party.vendor.Vendor;
 import moh.adp.model.shared.Address;
+import moh.adp.model.shared.Phone;
 import moh.adp.service.client.ClientService;
 import moh.adp.service.client.ClientServiceImpl;
 import moh.adp.service.invoice.InvoiceService;
@@ -139,15 +139,23 @@ public abstract class RenewalTranslator<U> {
 		v.setAdpVendorRegNo(vendor.getVendorNum());
 		v.setVendorBusName(vendor.getLegalBusinessName());
 		if (vendor.getContact() != null) {
-			v.setVendorFirstname(vendor.getContact().getFirstName());
-			v.setVendorLastname(vendor.getContact().getLastName());
-			v.setVendorPositionTitle(vendor.getContact().getPositionTitle());
+			v.setVendorFirstname(blankIfNull(vendor.getContact().getFirstName()));
+			v.setVendorLastname(blankIfNull(vendor.getContact().getLastName()));
+			v.setVendorPositionTitle(blankIfNull(vendor.getContact().getPositionTitle()));
+		} else {
+			v.setVendorFirstname("");
+			v.setVendorLastname("");
+			v.setVendorPositionTitle("");
 		}
-		v.setVendorBusPhone(vendor.getBusinessPhone().getPhoneDisplay());
-		v.setVendorPhoneExtension(vendor.getBusinessPhone().getExtension());
+		if (vendor.getBusinessPhone() != null) {
+			v.setVendorBusPhone(blankIfNull(vendor.getBusinessPhone().getPhoneDisplay()));
+			v.setVendorPhoneExtension(blankIfNull(vendor.getBusinessPhone().getExtension()));
+		} else {
+			v.setVendorBusPhone("");
+			v.setVendorPhoneExtension("");
+		}
 		Address a = vendor.getAddress();
-		if (a==null)
-			return;
+		a = (a != null) ? a : new Address();
 		v.setVendorUnitNo(blankIfNull(a.getUnitNum()));
 		v.setVendorStreetNo(blankIfNull(a.getStreetNum()));
 		v.setVendorStreetName(blankIfNull(a.getStreetName()));
@@ -155,7 +163,7 @@ public abstract class RenewalTranslator<U> {
 		v.setVendorProvince(blankIfNull(a.getProvinceShortName()));
 		v.setVendorPostalCode(blankIfNull(a.getPostalCode()));
 		v.setVendorSignature("");
-//		v.setVendorSignDate();
+		v.setVendorSignDate("");
 	}
 
 	protected Client getClient(RenewalRecord r) {
