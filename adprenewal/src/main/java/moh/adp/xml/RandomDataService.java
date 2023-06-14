@@ -9,6 +9,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
+import moh.adp.common.DeviceCategory;
 import moh.adp.db.common.TestDBException;
 
 
@@ -33,6 +34,10 @@ public class RandomDataService implements RandomQueries {
 		return getOneValue(RANDOM_HEALTH_NUM, String.class);
 	}
 
+	public String getRandomHealthNumWithClaim(String deviceCode) {
+		return getOneValue(RANDOM_HEALTH_NUM_WITH_CLAIM, String.class, deviceCode);
+	}
+	
 	public Long getRandomClientAgent() {
 		return getOneValue(RANDOM_CLIENT_AGENT_ID, BigDecimal.class).longValue();
 	}	
@@ -55,7 +60,24 @@ public class RandomDataService implements RandomQueries {
 			throw new TestDBException("Failed to run query: " + sql, e);
 		}
 	}
+
+	private <T> T getOneValue(String sql, Class<T> classT, String...params) {
+		try {
+			PreparedStatement ps = getStatement(sql);
+			setParams(ps, params);
+			ResultSet rs = ps.executeQuery();
+			rs.next();
+			return classT.cast(rs.getObject(1));
+		} catch (SQLException e) {
+			throw new TestDBException("Failed to run query: " + sql, e);
+		}
+	}
 	
+	private void setParams(PreparedStatement ps, String[] params) throws SQLException {
+		for(int i=0; i<params.length; i++)
+			ps.setString(i + 1, params[i]);		
+	}
+
 	private PreparedStatement getStatement(String sql) throws SQLException {
 		return getAdpDataSource().getConnection().prepareStatement(sql);
 	}

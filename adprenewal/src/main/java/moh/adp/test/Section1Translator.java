@@ -17,6 +17,7 @@ public class Section1Translator <T, U> extends SectionTranslator {
 		addField(Section1.class, "applicantFirstname",  "claimClient", "firstName");
 		addField(Section1.class, "applicantMiddleinitial", "claimClient", "middleName");
 		addField(Section1.class, "healthNo",            "claimClient", "healthNumber");
+		addField(Section1.class, "versionNo",           "claimClient", "versionCode");		
 		addField(Section1.class, "dateOfBirth",         "claimClient", "dateOfBirth");
 		addField(Section1.class, "nameLTCH", 		    "claimClient", "mailingAddress", "longTermCareHomeName");
 		addField(Section1.class, "unitNo", 			    "claimClient", "mailingAddress", "unitNum");
@@ -46,7 +47,6 @@ public class Section1Translator <T, U> extends SectionTranslator {
 
 	protected void translateSection(Claim claim, XmlForm form){
 		Section1 s1 = form.getSection1();
-		s1.setVersionNo("202301"); //TODO
 		s1.setConfirmationOfBenefit(new ConfirmationOfBenefit());
 		populateAll(Section1.class, claim, s1);
 		translateConfirmationOfBenefit(claim, s1.getConfirmationOfBenefit());

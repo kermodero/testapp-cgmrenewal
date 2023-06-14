@@ -11,7 +11,14 @@ public interface RandomQueries {
 			"AND HEALTH_NUMBER IS NOT NULL         " +
 			"AND rownum = 1                        ";
 
-	String RANDOM_HEALTH_NUM_WITH_GM_CLAIM = "";
+	String RANDOM_HEALTH_NUM_WITH_CLAIM = "WITH GM_HNS AS (SELECT HEALTH_NUMBER "
+			+ "FROM CLIENT cle "
+			+ "INNER JOIN CLAIM cla ON cle.CLIENT_ID = cla.CLIENT_ID "
+			+ "WHERE cla.DEVICE_CATEGORY_ID = ? "
+			+ "ORDER BY DBMS_RANDOM.RANDOM)"
+			+ "SELECT * "
+			+ "FROM GM_HNS "
+			+ "WHERE rownum = 1";
 	
 	String RANDOM_CLIENT_AGENT_ID = 
 			"SELECT client_agent_id      " +

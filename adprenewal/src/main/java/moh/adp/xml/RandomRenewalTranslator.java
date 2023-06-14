@@ -55,7 +55,7 @@ public abstract class RandomRenewalTranslator<U> extends RenewalTranslator<U> {
 	
 	protected Client getClient(RenewalRecord r) {
 		try {
-			String randomHealthNum = RandomDataService.instance().getRandomHealthNum();
+			String randomHealthNum = RandomDataService.instance().getRandomHealthNumWithClaim("310");
 			ClientService service = new ClientServiceImpl();
 			return service.getClientView(randomHealthNum).getAdpClient();
 		} catch (Exception e) {

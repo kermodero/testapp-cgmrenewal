@@ -35,7 +35,7 @@ import moh.adp.xml.model.renewal.gm.v202311.Form1.Form.Section4;
 public abstract class RenewalTranslator<U> {
 	private static final String FORM_TYPE="RENEWAL";
 	protected final String OUTPUT_DIR = "c:/test/renewals/";		
-	protected SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/YYYY");
+	protected SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
 	public abstract DeviceCategory getDeviceCategory(); 
 	public Random random = new Random();
 	
@@ -78,13 +78,14 @@ public abstract class RenewalTranslator<U> {
 	protected void populateSection1(Form f, RenewalRecord r, Client c) {
 		f.setSection1(new Form1.Form.Section1());
 		Section1 section1 = f.getSection1();
-		section1.setApplicantFirstname(blankIfNull(c.getLastName()));
-		section1.setApplicantLastname(blankIfNull(c.getFirstName()));
+		System.out.println("first and last names? " + c.getFirstName() + " " + c.getLastName());
+		section1.setApplicantFirstname(blankIfNull(c.getFirstName()));
+		section1.setApplicantLastname(blankIfNull(c.getLastName()));
 		section1.setApplicantMiddleinitial(blankIfNull(c.getMiddleName()));
 		section1.setVersionNo(blankIfNull(c.getVersionCode()));
 		section1.setDateOfBirth(sdf.format(c.getDateOfBirth()));
-		section1.setHealthNo(r.getHealthNumber());
-		section1.setVersionNo(r.getFormVersion());
+		section1.setHealthNo(c.getHealthNumber());
+
 		//confirmation of benefit?
 	}
 

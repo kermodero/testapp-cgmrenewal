@@ -19,9 +19,10 @@ public class GMRenewalRandomTranslator extends RandomRenewalTranslator<RenewalRe
 		f.setSection2(new Form1.Form.Section2());
 		Section2 section2 = f.getSection2();
 		section2.setCertification(r.getCertification());
-		section2.setQuestion1(r.getQuestion1());
-		section2.setQuestion2(r.getQuestion2());
-		section2.setQuestion3(r.getQuestion3());
+		//NEEDS TO BE FIXED IN DB - RENEWAL_RECORD QUESTION1-3 are CHAR 1
+		section2.setQuestion1("Yes");
+		section2.setQuestion2("Yes");
+		section2.setQuestion3("Yes");
 		section2.setSignature(r.getSignature());
 		section2.setSignDate(sdf.format(r.getSignDate()));
 		section2.setSignedBy(r.getSignedBy());				
