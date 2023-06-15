@@ -39,6 +39,7 @@ import moh.adp.xml.model.gm.v202301.GMForm1;
 public class TestCaseService {
 	private static TestCaseService tcs;
 	private RandomClaimGenerator randomClaimGenerator = new RandomClaimGenerator();
+	private static Map<String, String> properties;
 	
 	private TestCaseService(){		
 	}
@@ -49,6 +50,10 @@ public class TestCaseService {
 	
 	public static TestCaseService instance() {
 		return tcs;
+	}
+	
+	public static void setProperties(Map<String, String> applicationProperties) {
+		properties = applicationProperties;
 	}
 	
 	public Test getTestCase(String name, EntityManager em) {
@@ -146,13 +151,11 @@ public class TestCaseService {
 	private void saveToSFTS(Map<String, String> eRenewalXMLDocs) {
 		if (eRenewalXMLDocs != null)
 			eRenewalXMLDocs.forEach((name, doc) -> saveFile(name, doc));
-		System.out.println();
 	}
 
 	protected void saveFile(String name, String doc) {
-		System.out.println("DOC: " + doc);
 		try {
-			Files.write(Paths.get("c:/TEST/renewals/" + name), doc.getBytes(), new OpenOption[]{});
+			Files.write(Paths.get(properties.get("sftp.local.eclaims.directory") + name), doc.getBytes(), new OpenOption[]{});
 		} catch (IOException e) {
 			throw new TestDBException("couldn't save file", e);
 		}
