@@ -1,6 +1,8 @@
 package moh.adp.testapp.util;
 
 import java.io.IOException;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Properties {
 	private static java.util.Properties properties;
@@ -20,4 +22,7 @@ public class Properties {
 		return properties.getProperty(key);
 	}
 
+	public static Map<String, String> getAll() {
+		return properties.entrySet().stream().collect(Collectors.toMap(Object::toString, Object::toString));
+	}
 }

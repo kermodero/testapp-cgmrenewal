@@ -10,7 +10,7 @@ public class TestDataService {
 	@Inject
 	private Logger logger;
 	@Inject
-	public SFTPService sftpService;
+	public SFTService sftpService;
 	public final String USER = "USER";
 	
 	public void prepareAll(String testId) {

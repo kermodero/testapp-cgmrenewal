@@ -53,12 +53,6 @@ public class ADAMServer {
 		return new Result(tr.getMessage() + " " + tr.getOutcome(), Result.Outcome.UNKNOWN);
 	}	
 
-/*	public Result createRandomClaims(String deviceCategory, int numberOfClaims) {
-	    logger.debug("creating " + numberOfClaims + " random claims of device category " + deviceCategory);
-	    TestResult tr = TestCaseService.instance().createRandom(deviceCategory, numberOfClaims, em);
-		return new Result(tr.getMessage() + " " + tr.getOutcome(), Result.Outcome.UNKNOWN);
-	}*/
-
 	public Result createRandomRenewals(String deviceCategory, int count) {
 	    logger.debug("creating " + count + " random claims of device category " + deviceCategory);
 	    TestResult tr = TestCaseService.instance().createRandom(deviceCategory, count, em);

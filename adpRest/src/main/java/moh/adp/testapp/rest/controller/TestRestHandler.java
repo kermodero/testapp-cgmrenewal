@@ -15,7 +15,9 @@ import javax.ws.rs.core.SecurityContext;
 
 import org.slf4j.Logger;
 
+import moh.adp.db.renewalservice.TestCaseService;
 import moh.adp.testapp.adam.ADAMServer;
+import moh.adp.testapp.adam.SFTService;
 import moh.adp.testapp.rest.common.Result;
 import moh.adp.testapp.rest.common.TestScope;
 import moh.adp.testapp.util.DummyDataService;
@@ -30,6 +32,8 @@ public class TestRestHandler {
 	public SecurityContext secContext;
 	@Inject
 	public ADAMServer adamServer;	
+	//@Inject
+	//public SFTService sftService;	
 	@Inject
 	public Logger logger;	
 	@Inject
@@ -37,6 +41,7 @@ public class TestRestHandler {
 	
 	public TestRestHandler() {
 		Properties.load();
+		TestCaseService.setProperties(Properties.getAll());
 	}
 	
 	@GET
@@ -62,6 +67,16 @@ public class TestRestHandler {
 		logger.debug("renewal/random, category: " + deviceCategory + ", count: " + count);
 		login();
 		return adamServer.createRandomRenewals(deviceCategory, Integer.parseInt(count));
+	}	
+	
+	@GET
+	@Path("/renewFull/{deviceCategory}/{count}")
+	public Result renewalFull(@PathParam("deviceCategory") String deviceCategory, @PathParam("count") String count) throws Exception {
+		logger.debug("renewal/random, category: " + deviceCategory + ", count: " + count);
+		login();
+		adamServer.createRandomRenewals(deviceCategory, Integer.parseInt(count));
+		//sftService.doDefaultTransfer();
+		return new Result();
 	}	
 	
 	@GET
