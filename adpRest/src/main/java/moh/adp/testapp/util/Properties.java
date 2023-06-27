@@ -23,6 +23,7 @@ public class Properties {
 	}
 
 	public static Map<String, String> getAll() {
-		return properties.entrySet().stream().collect(Collectors.toMap(Object::toString, Object::toString));
+		load();
+		return properties.entrySet().stream().collect(Collectors.toMap(e -> e.getKey().toString(),  e -> e.getValue().toString()));
 	}
 }

@@ -1,38 +1,47 @@
 package moh.adp.testapp.adam;
 
 import java.io.File;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.vfs2.FileSystemOptions;
-import org.apache.commons.vfs2.provider.sftp.SftpClientFactory;
-import org.apache.commons.vfs2.provider.sftp.SftpFileSystemConfigBuilder;
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
-import com.jcraft.jsch.ChannelSftp;
-import com.jcraft.jsch.Session;
+import org.slf4j.Logger;
 
+import com.jscape.inet.sftp.Sftp;
+import com.jscape.inet.ssh.util.SshParameters;
 
+import moh.adp.model.config.SftsConfig;
+import moh.adp.server.AdpServiceLocator;
+import moh.adp.server.config.ConfigSession;
 import moh.adp.testapp.util.Properties;
 
-
+@Singleton
 public class SFTService {
 	private Map<String, String> defaults;
 	private int RETRY_TIMES; 
+	@Inject
+	private Logger logger;
+	
 	
 	public SFTService(){
 		init();
 	}
 	
-	private void init() {
+	@PostConstruct
+	public void init() {
 		defaults = new HashMap<>();
 		defaults.put("hostname", Properties.get("sftp.hostname"));
 		defaults.put("port", Properties.get("sftp.port"));
 		defaults.put("username", Properties.get("sftp.username"));
 		defaults.put("password", Properties.get("sftp.password"));
+		defaults.put("localdir", Properties.get("sftp.local.eclaims.directory"));		
+		defaults.put("remotedir", Properties.get("sftp.remote.eclaims.directory"));
 		RETRY_TIMES = Integer.parseInt(Properties.get("sftp.retry_times"));
 	}
 	
@@ -49,50 +58,60 @@ public class SFTService {
 	}
 
 	private void tryDefaultTransfer() throws Exception {
-		Session session = getSession();
-		session.connect();
-		ChannelSftp channel = (ChannelSftp)session.openChannel("sftp");
-		channel.lcd(defaults.get("sftp.local.eclaims.directory"));
-		channel.cd(defaults.get("sftp.remote.eclaims.directory"));
-		List<String> fileNames = getFileNames();
-		transferFiles(channel, fileNames);
+        Sftp channel = getSession(); 
+        channel.connect();
+		channel.setLocalDir(getLocalDir());
+		channel.setDir(getRemoteDir());
+		List<File> files = getFiles();
+		transferFiles(channel, files);
 	}
 
-	private void transferFiles(ChannelSftp channel, List<String> fileNames) {
-		System.out.println("about to sftp");
-		fileNames.forEach(fn -> {
+	private void transferFiles(Sftp channel, List<File> files) {
+		files.forEach(file -> {
 			try {
-				channel.put(fn);
+				logger.debug("sftp-ing file " + file.getName());
+				channel.upload(file);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		});		
 	}
 
-	private List<String> getFileNames() {
-		List<String> fileNames = new ArrayList<>();
-		Path localDir = Paths.get(defaults.get("local.eclaims.directory"));
-		localDir.forEach(p -> {
-			File f = p.toFile();
-			if (f.isFile()) {
-				System.out.println("adding file to sftp " + f.getName());
-				fileNames.add(f.getName());
-			}
-		});
-		return fileNames;
+	private List<File> getFiles() throws Exception {
+		List<File> files = new ArrayList<>();
+		File localDir = Paths.get(defaults.get("localdir")).toFile();
+		for (File file : localDir.listFiles()) {
+			if (file.isFile()) 
+				files.add(file);
+		}
+		return files;
 	}
 
-	private Session getSession() throws Exception {
-		return SftpClientFactory.createConnection(defaults.get("hostname"), 
-				Integer.parseInt(defaults.get("port")), 
-				defaults.get("username").toCharArray(), 
-				defaults.get("password").toCharArray(), 
-				null); //getFSOptions())
+	private Sftp getSession() throws Exception {
+        SftsConfig p = AdpServiceLocator.getBeanReference(ConfigSession.class).getSftsParameter();
+		SshParameters params = new SshParameters(p.getHostIp(),
+											p.getPortInt(),
+											p.getUsername(), 
+											p.getPassword());
+		return new Sftp(params);	
 	}
 
 	@SuppressWarnings("unused")
-	private FileSystemOptions getFSOptions() {
-		return SftpFileSystemConfigBuilder.getInstance().getProxyOptions(null);
+	private Sftp getSession1() throws Exception {
+//      SftsConfig p = AdpServiceLocator.getBeanReference(ConfigSession.class).getSftsParameter();
+		SshParameters params = new SshParameters(defaults.get("hostname"), 
+											Integer.parseInt(defaults.get("port")), 
+											defaults.get("username"), 
+											defaults.get("password"));
+		return new Sftp(params);	
+	}	
+	
+	private File getLocalDir() {
+		return Paths.get(defaults.get("localdir")).toFile();
+	}
+	
+	private String getRemoteDir() {
+		return defaults.get("remotedir");
 	}
 	
 }

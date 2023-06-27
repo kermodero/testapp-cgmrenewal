@@ -9,8 +9,6 @@ import org.slf4j.Logger;
 public class TestDataService {
 	@Inject
 	private Logger logger;
-	@Inject
-	public SFTService sftpService;
 	public final String USER = "USER";
 	
 	public void prepareAll(String testId) {

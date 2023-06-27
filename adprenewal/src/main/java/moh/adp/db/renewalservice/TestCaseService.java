@@ -155,8 +155,10 @@ public class TestCaseService {
 
 	protected void saveFile(String name, String doc) {
 		try {
-			Files.write(Paths.get(properties.get("sftp.local.eclaims.directory") + name), doc.getBytes(), new OpenOption[]{});
-		} catch (IOException e) {
+			Files.write(Paths.get(properties.get("sftp.local.eclaims.directory") + "/" + name), doc.getBytes(), new OpenOption[]{});
+		} catch (Exception e) {
+			System.out.println("what now ?" );
+			e.printStackTrace();
 			throw new TestDBException("couldn't save file", e);
 		}
 	}	

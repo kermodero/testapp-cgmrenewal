@@ -15,6 +15,7 @@ import javax.ws.rs.core.SecurityContext;
 
 import org.slf4j.Logger;
 
+import moh.adp.db.renewalservice.TestCaseReportService;
 import moh.adp.db.renewalservice.TestCaseService;
 import moh.adp.testapp.adam.ADAMServer;
 import moh.adp.testapp.adam.SFTService;
@@ -32,16 +33,16 @@ public class TestRestHandler {
 	public SecurityContext secContext;
 	@Inject
 	public ADAMServer adamServer;	
-	//@Inject
-	//public SFTService sftService;	
 	@Inject
-	public Logger logger;	
+	public SFTService sftService;	
 	@Inject
 	public DummyDataService dummyData;
+	@Inject
+	public Logger logger;	
 	
 	public TestRestHandler() {
-		Properties.load();
 		TestCaseService.setProperties(Properties.getAll());
+		TestCaseReportService.setProperties(Properties.getAll());
 	}
 	
 	@GET
@@ -70,12 +71,14 @@ public class TestRestHandler {
 	}	
 	
 	@GET
-	@Path("/renewFull/{deviceCategory}/{count}")
-	public Result renewalFull(@PathParam("deviceCategory") String deviceCategory, @PathParam("count") String count) throws Exception {
-		logger.debug("renewal/random, category: " + deviceCategory + ", count: " + count);
+	@Path("/renewFull/{testId}")
+	public Result renewalFull(@PathParam("testId") String testId) throws Exception {
+		logger.debug("regression, scope: " + testId);
 		login();
-		adamServer.createRandomRenewals(deviceCategory, Integer.parseInt(count));
-		//sftService.doDefaultTransfer();
+		adamServer.runRenewal(testId);
+		loginAsAdmin();
+		sftService.doDefaultTransfer();
+		adamServer.runERenewal();
 		return new Result();
 	}	
 	
@@ -149,4 +152,15 @@ public class TestRestHandler {
 		}
 	}
 
+	//Have to turn off application security in WAS Console -> Security -> Global security
+	private void loginAsAdmin() throws ServletException {
+		try {
+			request.logout();
+			request.login(Properties.get("admin.username"), Properties.get("admin.password"));
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new ServletException(e);
+		}
+	}
+	
 }

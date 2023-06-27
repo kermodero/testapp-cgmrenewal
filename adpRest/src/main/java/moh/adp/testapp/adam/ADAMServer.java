@@ -12,7 +12,12 @@ import org.slf4j.Logger;
 
 import moh.adp.db.renewalservice.TestCaseService;
 import moh.adp.db.renewalservice.TestResult;
+import moh.adp.server.esubmission.eClaim.EClaimBatchService;
+import moh.adp.server.esubmission.eClaim.ERenewalBatchProcessingService;
+import moh.adp.service.admin.batch.ProcessAdminBatchService;
 import moh.adp.testapp.rest.common.Result;
+import moh.adp.testapp.rest.common.TestReport;
+import moh.adp.testapp.rest.common.Result.Outcome;
 import moh.adp.testapp.rest.common.TestScope;
 
 
@@ -21,12 +26,13 @@ public class ADAMServer {
 	@Inject
 	public Logger logger;
 	@Inject
-	public TestDataService testDataService;
+	public TestReportService testReportService;
 	public TestClaimService claimService;	
 	@PersistenceContext(unitName = "adptestdb")
 	private EntityManager em;
 	@Resource 
 	private UserTransaction userTransaction;
+	private Object renewalBatchLock = new Object();
 	
 	public ADAMServer() {
 		
@@ -44,6 +50,7 @@ public class ADAMServer {
 	public Result runRenewal(String testId) {
 	    logger.debug("running renewal. " + logger + " " + testId + " service? ");
 	    TestResult tr = TestCaseService.instance().runGMRenewalTestCase(testId, em);
+	    TestReport testReport = testReportService.runGMRenewalReport(testId, em);
 		return new Result(tr.getMessage() + " " + tr.getOutcome(), Result.Outcome.UNKNOWN);
 	}
 	
@@ -59,14 +66,30 @@ public class ADAMServer {
 		return new Result(tr.getMessage() + " " + tr.getOutcome(), Result.Outcome.UNKNOWN);
 	}
 
+	public Result runERenewal() {
+		try {
+			return tryToRunERenewal();	
+		} catch (Exception e) {
+			return new Result("ERenewal failed " + e.getMessage(), Outcome.ERROR);
+		}
+	}
+
+	private Result tryToRunERenewal() throws Exception {
+		synchronized (renewalBatchLock) { // ensure this blocks if concurrent attempts are made to execute it.		
+			EClaimBatchService.initSFTPConnection();
+			EClaimBatchService.loadEClaimFiles();
+			ERenewalBatchProcessingService eRenewalBatchProcess = new ERenewalBatchProcessingService();
+			eRenewalBatchProcess.processFiles();
+		}		
+		return new Result("Payment Batch successful.", Outcome.SUCCESS);
+	}		
+	
 	public void createClaims(Result r, String testName) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	public void runETL(Result r, String directory, String testName) {
 		// TODO Auto-generated method stub
-		
-	}		
-	
+	}
+
 }

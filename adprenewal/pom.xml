@@ -33,13 +33,10 @@
 			<artifactId>adpservice</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<!-- <dependency> <groupId>moh.adp.test</groupId> <artifactId>adptestcommon</artifactId> 
-			<version>${revision}</version> </dependency> -->
 		<dependency>
 			<groupId>javax</groupId>
 			<artifactId>javaee-api</artifactId>
 			<version>${javaee.version}</version>
-			<!-- <scope>provided</scope> -->
 		</dependency>
 		<dependency>
 			<groupId>commons-beanutils</groupId>
