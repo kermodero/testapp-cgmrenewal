@@ -85,8 +85,18 @@ public class RenewalRecord implements Serializable {
 	private List<RenewalRecField> renewalRecFields;
 
 	// bi-directional many-to-one association to RenewalRecVariance
-	@OneToMany(mappedBy = "renewalRecord")
+	@OneToMany(mappedBy = "renewalRecord", fetch=FetchType.EAGER)
 	private List<RenewalRecVariance> renewalRecVariances;
+	
+	//bi-directional many-to-one association to RenewalErrorOutcome
+	@OneToMany(mappedBy="renewalRecord", fetch=FetchType.EAGER)
+	private List<RenewalErrorOutcome> renewalErrorOutcomes;
+	
+	
+	// bi-directional many-to-one association to RenewalRecVariance
+	//@OneToMany(mappedBy = "renewalRecordId", fetch=FetchType.EAGER)
+	private List<RenewalPositiveOutcome> renewalPositiveOutcomes;
+	
 
 	public RenewalRecord() {
 	}
@@ -294,4 +304,44 @@ public class RenewalRecord implements Serializable {
 		return renewalRecVariance;
 	}
 
+	public List<RenewalErrorOutcome> getRenewalErrorOutcome() {
+		return this.renewalErrorOutcomes;
+	}
+
+	public void setRenewalErrorOutcome(List<RenewalErrorOutcome> renewalErrorOutcome) {
+		this.renewalErrorOutcomes = renewalErrorOutcome;
+	}
+
+	public RenewalErrorOutcome addRenewalErrorOutcome(RenewalErrorOutcome renewalErrorOutcome) {
+		getRenewalErrorOutcome().add(renewalErrorOutcome);
+		renewalErrorOutcome.setRenewalRecord(this);
+		return renewalErrorOutcome;
+	}
+
+	public RenewalErrorOutcome removeRenewalErrorOutcome(RenewalErrorOutcome renewalRecVariance) {
+		getRenewalErrorOutcome().remove(renewalRecVariance);
+		renewalRecVariance.setRenewalRecord(null);
+		return renewalRecVariance;
+	}
+	
+	public List<RenewalPositiveOutcome> getRenewalPositiveOutcome() {
+		return this.renewalPositiveOutcomes;
+	}
+
+	public void setRenewalPositiveOutcome(List<RenewalPositiveOutcome> renewalPositiveOutcome) {
+		this.renewalPositiveOutcomes = renewalPositiveOutcome;
+	}
+
+	public RenewalPositiveOutcome addRenewalPositiveOutcome(RenewalPositiveOutcome renewalPositiveOutcome) {
+		getRenewalPositiveOutcome().add(renewalPositiveOutcome);
+		renewalPositiveOutcome.setRenewalRecordId(this.getId());
+		return renewalPositiveOutcome;
+	}
+
+	public RenewalPositiveOutcome removeRenewalPositiveOutcome(RenewalPositiveOutcome renewalRecVariance) {
+		getRenewalPositiveOutcome().remove(renewalRecVariance);
+		renewalRecVariance.setRenewalRecordId(-1);
+		return renewalRecVariance;
+	}	
+	
 }

@@ -10,6 +10,9 @@ import javax.persistence.EntityManager;
 
 import org.slf4j.Logger;
 
+
+import moh.adp.db.renewalservice.TestCaseReportService;
+import moh.adp.outcome.TestOutcome;
 import moh.adp.testapp.rest.common.TestReport;
 
 
@@ -29,9 +32,12 @@ public class TestReportService {
 	}
 
 	public TestReport runGMRenewalReport(String testId, EntityManager em) {
-		
-		
-		
+		TestOutcome to = TestCaseReportService.instance().runGMRenewalReport(testId, em);
+		return createReport(to);
+	}
+
+	private TestReport createReport(TestOutcome to) {
+
 		return null;
 	}
 	

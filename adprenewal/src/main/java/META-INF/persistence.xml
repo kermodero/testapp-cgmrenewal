@@ -9,6 +9,8 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/x
 		<class>moh.adp.db.jpa.InvoiceRecord</class>
 		<class>moh.adp.db.jpa.ClaimRecVariance</class>
 		<class>moh.adp.db.jpa.ClaimRecField</class>
+		<class>moh.adp.db.jpa.RenewalErrorOutcome</class>
+		<class>moh.adp.db.jpa.RenewalPositiveOutcome</class>				
 		<class>moh.adp.db.jpa.RenewalRecord</class>
 		<class>moh.adp.db.jpa.RenewalRecField</class>
 		<class>moh.adp.db.jpa.RenewalRecVariance</class>
