@@ -12,6 +12,8 @@ public class RandomClaimGenerator {
 		switch(deviceCode) {
 		case "GM":
 			return (List<U>) RandomGM.generateGM(count);
+		case "OXF":
+			return (List<U>) RandomOXF.generateOXF(count);			
 		default:
 			return new ArrayList<>();
 		}

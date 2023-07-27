@@ -40,6 +40,16 @@ public abstract class RandomClaim<U extends Claim> {
 		populateClientAgent(claim);
 		populatePhysician(claim);
 		populateVendor(claim);
+		populateAuthorizer(claim);
+		populateTherapist(claim);
+	}
+
+	private void populateTherapist(Claim claim) {
+		claim.setRespiratoryTherapistSignature(getClaimSignature(CodeValueConsts.SIGNATURE_TYPE_RRT_CD));
+	}
+
+	private void populateAuthorizer(Claim claim) {
+		claim.setAuthorizerSignature(getClaimSignature(CodeValueConsts.SIGNATURE_TYPE_AUTHORIZER_CD));
 	}
 
 	private void populatePhysician(Claim claim) {

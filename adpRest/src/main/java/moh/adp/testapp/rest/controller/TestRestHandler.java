@@ -86,6 +86,15 @@ public class TestRestHandler {
 	}	
 	
 	@GET
+	@Path("/eox/generate/{testId}")
+	public Result generateEOXFiles(@PathParam("testId") String testId, @PathParam("count") int count) throws Exception {
+		logger.debug("eox generation, scope: " + testId);
+		login();
+		Result r = adamServer.generateEOXFiles(testId, count);
+		return r;
+	}	
+	
+	@GET
 	@Path("/claim/create/{testName}")
 	public Result createClaims(@PathParam("testName") String testName) throws Exception {
 		logger.debug("create claims test id: " + testName);

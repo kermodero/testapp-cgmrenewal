@@ -51,7 +51,7 @@ public class ADAMServer {
 	    TestResult tr = TestCaseService.instance().runGMRenewalTestCase(testId, em);
 		return new Result("All good", tr, Result.Outcome.UNKNOWN);
 	}
-	
+
 	public Result runReport(TestResult testResult) {
 	    logger.debug("running test result " + logger + " " + testResult + " service? ");
 	    TestReport testReport = testReportService.runGMRenewalReport(testResult, em);
@@ -88,6 +88,12 @@ public class ADAMServer {
 		return new Result("Payment Batch successful.", Outcome.SUCCESS);
 	}		
 	
+	public Result generateEOXFiles(String testId, int count) {
+	    logger.debug("generating EOX: " + testId);
+	    TestResult tr = TestCaseService.instance().generateEOXFiles(testId, count, em);
+		return new Result("Generated EOX ", tr, Result.Outcome.UNKNOWN);
+	}
+		
 	public void createClaims(Result r, String testName) {
 		// TODO Auto-generated method stub
 	}

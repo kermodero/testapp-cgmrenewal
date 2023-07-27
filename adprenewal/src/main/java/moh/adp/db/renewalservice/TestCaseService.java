@@ -28,11 +28,14 @@ import moh.adp.db.jpa.TestSet;
 import moh.adp.db.model.Test;
 import moh.adp.model.claim.Claim;
 import moh.adp.model.claim.form.ClaimGlucoseMonitor;
+import moh.adp.model.claim.form.ClaimOxygen;
 import moh.adp.test.random.RandomClaimGenerator;
 import moh.adp.test.translator.GMTranslator;
+import moh.adp.test.translator.OXFTranslator;
 import moh.adp.xml.RenewalTranslator;
 import moh.adp.xml.RenewalTranslatorFactory;
 import moh.adp.xml.model.gm.v202301.GMForm1;
+import moh.adp.xml.model.oxFirstTime.v202301.OxFirstTimeForm1;
 
 //Old fashioned singleton because 
 //injection is too convoluted
@@ -75,8 +78,7 @@ public class TestCaseService {
 			List<Claim> claims = randomClaimGenerator.generateClaims(deviceCategory, numberOfClaims);
 			AtomicInteger i=new AtomicInteger(0);
 			claims.forEach(c -> {
-				Pair<String, GMForm1> form = gmTranslator.translate((ClaimGlucoseMonitor)c, "GM-Test" + i.getAndIncrement());
-				eClaimXMLDocs.put(form.getLeft(), marshal(form.getRight()));
+				translateAndMarshal(deviceCategory, eClaimXMLDocs, c, i);
 			});
 			saveToSFTS(eClaimXMLDocs);				
 			return new TestResult(TestOutcome.EXPECTED_OUTCOME, "");
@@ -84,6 +86,20 @@ public class TestCaseService {
 			e.printStackTrace();
 			return new TestResult(TestOutcome.TEST_APP_FAILURE, "");
 		}
+	}
+
+	private void translateAndMarshal(String deviceCategory, Map<String, String> eClaimXMLDocs, Claim c, AtomicInteger i) {
+		switch (deviceCategory) {
+		case "GM":
+			Pair<String, GMForm1> form = new GMTranslator().translate((ClaimGlucoseMonitor)c, "GM-Test" + i.getAndIncrement());
+			eClaimXMLDocs.put(form.getLeft(), marshal(form.getRight()));
+			break;
+		case "OXF":
+			Pair<String, OxFirstTimeForm1> formOXF = new OXFTranslator().translate((ClaimOxygen)c, "OXF-Test" + i.getAndIncrement());
+			eClaimXMLDocs.put(formOXF.getLeft(), marshal(formOXF.getRight()));
+			break;
+		}
+
 	}
 
 	private <U> String marshal(U f) {
@@ -148,6 +164,12 @@ public class TestCaseService {
 		return new TestResult(testCase, eRenewalXMLDocs.keySet(), TestOutcome.EXPECTED_OUTCOME, "alright, running test case");
 	}
 	
+	public TestResult generateEOXFiles(String testCase, int count, EntityManager em) {
+		Map<String, String> results = new HashMap<>();
+		TestResult tr = createRandom("OXF", count, em);
+		return tr;
+	}
+
 	private void saveToSFTS(Map<String, String> eRenewalXMLDocs) {
 		if (eRenewalXMLDocs != null)
 			eRenewalXMLDocs.forEach((name, doc) -> saveFile(name, doc));

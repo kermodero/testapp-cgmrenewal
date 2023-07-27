@@ -6,6 +6,7 @@ import java.util.Map;
 import moh.adp.test.translator.CATranslator;
 import moh.adp.test.translator.GMTranslator;
 import moh.adp.test.translator.METranslator;
+import moh.adp.test.translator.OXFTranslator;
 import moh.adp.xml.model.XmlForm;
 
 public class Translator {
@@ -24,13 +25,13 @@ public class Translator {
 		dcTranslators.put(DeviceCategory.LP,  new LPTranslator ());
 	*/
 		dcTranslators.put(DeviceCategory.ME,  new METranslator ());
+		dcTranslators.put(DeviceCategory.OXF, new OXFTranslator());
+//		dcTranslators.put(DeviceCategory.OXR, new OXRTranslator());		
 	/*
 		dcTranslators.put(DeviceCategory.MI,  new MITranslator ());
 		dcTranslators.put(DeviceCategory.MD,  new MDTranslator ());
 		dcTranslators.put(DeviceCategory.OP,  new OPTranslator ());
 		dcTranslators.put(DeviceCategory.OR,  new ORTranslator ());
-		dcTranslators.put(DeviceCategory.OXF, new OXFTranslator());
-		dcTranslators.put(DeviceCategory.OXR, new OXRTranslator());
 		dcTranslators.put(DeviceCategory.PM,  new PMTranslator ());
 		dcTranslators.put(DeviceCategory.RE,  new RETranslator ());
 		dcTranslators.put(DeviceCategory.VA,  new VATranslator ());	*/

@@ -57,7 +57,6 @@ public class Section3Translator <T, U> extends SectionTranslator {
 		addField(Section3.Contact.class, "phoneExtension"          , "clientAgent", "businessPhone",  "extension");
 	}
 
-	
 	private void setRelationship(Claim claim, Section3.Contact contact) {
 	    String SPOUSE = "spouse";
 	    String PARENT = "parent";
