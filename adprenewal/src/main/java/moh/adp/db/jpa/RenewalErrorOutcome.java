@@ -3,6 +3,7 @@ package moh.adp.db.jpa;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import moh.adp.outcome.RecordOutcome;
 
 /**
  * The persistent class for the RENEWAL_ERROR_OUTCOME database table.
@@ -20,7 +21,7 @@ import javax.persistence.*;
 							+ "LEFT JOIN RS.renewalRecords RR "
 							+ "LEFT JOIN RR.renewalErrorOutcomes REO "
 							+ "WHERE T.name = :name") })
-public class RenewalErrorOutcome implements Serializable {
+public class RenewalErrorOutcome extends RecordOutcome implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -87,8 +88,6 @@ public class RenewalErrorOutcome implements Serializable {
 	public void setErrorParm3(String errorParm3) {
 		this.errorParm3 = errorParm3;
 	}
-
-
 
 	public RenewalRecord getRenewalRecord() {
 		return renewalRecord;

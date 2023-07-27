@@ -14,7 +14,6 @@ import moh.adp.db.renewalservice.TestCaseService;
 import moh.adp.db.renewalservice.TestResult;
 import moh.adp.server.esubmission.eClaim.EClaimBatchService;
 import moh.adp.server.esubmission.eClaim.ERenewalBatchProcessingService;
-import moh.adp.service.admin.batch.ProcessAdminBatchService;
 import moh.adp.testapp.rest.common.Result;
 import moh.adp.testapp.rest.common.TestReport;
 import moh.adp.testapp.rest.common.Result.Outcome;
@@ -50,9 +49,14 @@ public class ADAMServer {
 	public Result runRenewal(String testId) {
 	    logger.debug("running renewal. " + logger + " " + testId + " service? ");
 	    TestResult tr = TestCaseService.instance().runGMRenewalTestCase(testId, em);
-	    TestReport testReport = testReportService.runGMRenewalReport(testId, em);
-		return new Result(tr.getMessage() + " " + tr.getOutcome(), Result.Outcome.UNKNOWN);
+		return new Result("All good", tr, Result.Outcome.UNKNOWN);
 	}
+	
+	public Result runReport(TestResult testResult) {
+	    logger.debug("running test result " + logger + " " + testResult + " service? ");
+	    TestReport testReport = testReportService.runGMRenewalReport(testResult, em);
+		return new Result("report run", Result.Outcome.UNKNOWN);
+	}	
 	
 	public Result runRenewalRandom(String numberOfRecords) {
 	    logger.debug("running renewal random ");

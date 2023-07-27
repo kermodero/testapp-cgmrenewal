@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 
 import moh.adp.db.renewalservice.TestCaseReportService;
 import moh.adp.db.renewalservice.TestCaseService;
+import moh.adp.db.renewalservice.TestResult;
 import moh.adp.testapp.adam.ADAMServer;
 import moh.adp.testapp.adam.SFTService;
 import moh.adp.testapp.rest.common.Result;
@@ -75,11 +76,13 @@ public class TestRestHandler {
 	public Result renewalFull(@PathParam("testId") String testId) throws Exception {
 		logger.debug("regression, scope: " + testId);
 		login();
-		adamServer.runRenewal(testId);
+		Result r = adamServer.runRenewal(testId);
 		loginAsAdmin();
 		sftService.doDefaultTransfer();
 		adamServer.runERenewal();
-		return new Result();
+		login();
+		adamServer.runReport(r.getTestResult());
+		return r;
 	}	
 	
 	@GET

@@ -3,6 +3,8 @@ package moh.adp.testapp.rest.common;
 import java.util.ArrayList;
 import java.util.List;
 
+import moh.adp.db.renewalservice.TestResult;
+
 public class Result {
 	public enum Outcome {
 		SUCCESS,
@@ -16,6 +18,7 @@ public class Result {
 	private List<String> messages;
 	private Outcome outcome;
 	private Object content;
+	private TestResult testResult;
 	
 	public Result() {
 		this.outcome = Outcome.UNKNOWN;
@@ -25,6 +28,10 @@ public class Result {
 		super();
 		messages = new ArrayList<>();
 		this.outcome = outcome;
+	}
+	public Result(String message, TestResult tr, Outcome outcome) {
+		this(message, outcome);
+		this.testResult = tr;
 	}
 	public String getMessage() {
 		if (messages.isEmpty())
@@ -51,6 +58,12 @@ public class Result {
 	}
 	public void setContent(Object content) {
 		this.content = content;
+	}
+	public TestResult getTestResult() {
+		return testResult;
+	}
+	public void setTestResult(TestResult testResult) {
+		this.testResult = testResult;
 	}
 
 }

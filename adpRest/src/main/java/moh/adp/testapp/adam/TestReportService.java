@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 
 
 import moh.adp.db.renewalservice.TestCaseReportService;
+import moh.adp.db.renewalservice.TestResult;
 import moh.adp.outcome.TestOutcome;
 import moh.adp.testapp.rest.common.TestReport;
 
@@ -31,8 +32,8 @@ public class TestReportService {
 		
 	}
 
-	public TestReport runGMRenewalReport(String testId, EntityManager em) {
-		TestOutcome to = TestCaseReportService.instance().runGMRenewalReport(testId, em);
+	public TestReport runGMRenewalReport(TestResult testResult, EntityManager em) {
+		TestOutcome to = TestCaseReportService.instance().runGMRenewalReport(testResult, em);
 		return createReport(to);
 	}
 

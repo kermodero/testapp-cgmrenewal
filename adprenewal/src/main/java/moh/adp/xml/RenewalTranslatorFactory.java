@@ -12,7 +12,8 @@ public class RenewalTranslatorFactory {
 		switch (dc) {
 		case "GM" :
 			return new GMRenewalTranslator();
-		}
+		} 
+		
 		return null;
 	}	
 	

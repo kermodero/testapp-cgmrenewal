@@ -47,23 +47,22 @@ public class SFTService {
 	
 	public void doDefaultTransfer() {	
 		for (int i=0; i< RETRY_TIMES; i++) {
-			try {
-				tryDefaultTransfer();
-				break;
+			try (Sftp channel = tryDefaultTransfer()) {
+				break; //break from loop if successful
 			} catch (Exception e) {
 				e.printStackTrace();
-				continue;
 			}	
 		}
 	}
 
-	private void tryDefaultTransfer() throws Exception {
+	private Sftp tryDefaultTransfer() throws Exception {
         Sftp channel = getSession(); 
         channel.connect();
 		channel.setLocalDir(getLocalDir());
 		channel.setDir(getRemoteDir());
 		List<File> files = getFiles();
 		transferFiles(channel, files);
+		return channel;
 	}
 
 	private void transferFiles(Sftp channel, List<File> files) {
@@ -72,7 +71,7 @@ public class SFTService {
 				logger.debug("sftp-ing file " + file.getName());
 				channel.upload(file);
 			} catch (Exception e) {
-				e.printStackTrace();
+				e.printStackTrace(); //TODO: think about whether this should be percolated-up.
 			}
 		});		
 	}
@@ -95,16 +94,6 @@ public class SFTService {
 											p.getPassword());
 		return new Sftp(params);	
 	}
-
-	@SuppressWarnings("unused")
-	private Sftp getSession1() throws Exception {
-//      SftsConfig p = AdpServiceLocator.getBeanReference(ConfigSession.class).getSftsParameter();
-		SshParameters params = new SshParameters(defaults.get("hostname"), 
-											Integer.parseInt(defaults.get("port")), 
-											defaults.get("username"), 
-											defaults.get("password"));
-		return new Sftp(params);	
-	}	
 	
 	private File getLocalDir() {
 		return Paths.get(defaults.get("localdir")).toFile();

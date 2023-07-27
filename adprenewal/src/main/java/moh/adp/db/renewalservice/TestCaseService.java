@@ -145,7 +145,7 @@ public class TestCaseService {
 		List<RenewalRecord> records = getRecords(testSets); 
 		Map<String, String> eRenewalXMLDocs = getCGMRenewalESubXMLs(records); 
 		saveToSFTS(eRenewalXMLDocs);
-		return new TestResult(TestOutcome.EXPECTED_OUTCOME, "alright, running test case");
+		return new TestResult(testCase, eRenewalXMLDocs.keySet(), TestOutcome.EXPECTED_OUTCOME, "alright, running test case");
 	}
 	
 	private void saveToSFTS(Map<String, String> eRenewalXMLDocs) {
