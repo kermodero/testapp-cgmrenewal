@@ -64,6 +64,17 @@ public class Section4Translator<T, U> extends SectionTranslator {
 		addField(Physician.class, "date", "endDate");		
 	}
 
+	private void initTherapist(){
+		addField(Therapist.class, "therapistLastname", "lastName");
+		addField(Therapist.class, "therapistFirstname", "firstName");
+		addField(Therapist.class, "busPhone", "phone", "phoneNum");
+		addField(Therapist.class, "phoneExtension", "phone", "extension");
+		addField(Therapist.class, "registrationNumber", "billingNum");
+		//"signature" - unused?
+	//	addField(Therapist.class, 	    "theraYn1",
+		//addField(Therapist.class, 	    "theraYn2",
+	}
+	
 	private void initAuthorizer(){
 		addField(Authorizer.class, "authorizerLastname", "claimAuthorizer", "lastName");
 		addField(Authorizer.class, "authorizerFirstname", "claimAuthorizer", "firstName");
@@ -97,9 +108,6 @@ public class Section4Translator<T, U> extends SectionTranslator {
 		//addField(Vendor.class, "signature",	 "");
 		addField(Vendor.class, "date",		 "lastAllowableInvoiceDate");
 		//addField(Vendor.class, "invoiceNo",	 "");
-	}
-
-	private void initTherapist(){
 	}
 
 	private void initRehabilitationAssessor(){

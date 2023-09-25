@@ -73,7 +73,6 @@ public class TestCaseService {
 
 	public TestResult createRandom(String deviceCategory, int numberOfClaims, EntityManager em) {
 		try {
-			GMTranslator gmTranslator = new GMTranslator(); //TODO fix this!
 			Map<String, String> eClaimXMLDocs = new HashMap<>();
 			List<Claim> claims = randomClaimGenerator.generateClaims(deviceCategory, numberOfClaims);
 			AtomicInteger i=new AtomicInteger(0);

@@ -17,7 +17,6 @@ import org.slf4j.Logger;
 
 import moh.adp.db.renewalservice.TestCaseReportService;
 import moh.adp.db.renewalservice.TestCaseService;
-import moh.adp.db.renewalservice.TestResult;
 import moh.adp.testapp.adam.ADAMServer;
 import moh.adp.testapp.adam.SFTService;
 import moh.adp.testapp.rest.common.Result;
@@ -86,13 +85,22 @@ public class TestRestHandler {
 	}	
 	
 	@GET
-	@Path("/eox/generate/{testId}")
+	@Path("/eox/generate/{testId}/{count}")
 	public Result generateEOXFiles(@PathParam("testId") String testId, @PathParam("count") int count) throws Exception {
 		logger.debug("eox generation, scope: " + testId);
 		login();
 		Result r = adamServer.generateEOXFiles(testId, count);
 		return r;
 	}	
+
+	@GET
+	@Path("/eox/generate/{testId}/{count}")
+	public Result generateEOXInvoices(@PathParam("testId") String testId, @PathParam("count") int count) throws Exception {
+		logger.debug("eox generation, scope: " + testId);
+		login();
+		Result r = adamServer.generateEOXFiles(testId, count);
+		return r;
+	}		
 	
 	@GET
 	@Path("/claim/create/{testName}")

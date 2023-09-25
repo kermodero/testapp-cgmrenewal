@@ -46,6 +46,6 @@ public abstract class DCTranslator <T, U> extends SectionTranslator {
 		sb.append(System.currentTimeMillis() / 1000L); //unix time stamp
 		sb.append(".xml");
 		return sb.toString();
-	}
+	}	
 	
 }

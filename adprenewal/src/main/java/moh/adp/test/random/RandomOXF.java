@@ -24,9 +24,45 @@ public class RandomOXF extends RandomClaim<ClaimOxygen>{
 	}
 
 	@Override
-	public void populateDeviceSpecific(ClaimOxygen u) {
+	public void populateDeviceSpecific(ClaimOxygen cg) {
+/*		populateFunding(cg);
+		populateDelivery(cg);
+		populateReason(cg);
+		populateOxTherapy(cg);
+		populateIndependentAssessment(cg);
+		populateTestConfirmation(cg);*/
+		
+	}
+
+	private void populateTestConfirmation(ClaimOxygen cg) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	private void populateIndependentAssessment(ClaimOxygen cg) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void populateOxTherapy(ClaimOxygen cg) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void populateReason(ClaimOxygen cg) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void populateDelivery(ClaimOxygen cg) {
+		
+	}
+
+	private void populateFunding(ClaimOxygen cg) {
+		long code = 165000 + rand.nextInt(5) + 1; //see CodeValueConsts.OXYGEN_FUNDING_PROGRAM_REGULAR_CD  
+		cg.setFundingProgramCd(code);
+		long period = 166000 + rand.nextInt(5) + 1;
+		cg.setFormFundingPeriodCd(period);
 	}
 
 }

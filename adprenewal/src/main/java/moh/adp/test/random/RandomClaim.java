@@ -14,6 +14,7 @@ import moh.adp.model.claim.ClientAgent;
 import moh.adp.model.client.Client;
 import moh.adp.model.party.authorizer.AuthorizerView;
 import moh.adp.model.party.prescriber.PhysicianView;
+import moh.adp.model.party.respiratoryTherapist.RespiratoryTherapistView;
 import moh.adp.model.party.vendor.VendorView;
 import moh.adp.service.authorizer.AuthorizerService;
 import moh.adp.service.authorizer.AuthorizerServiceImpl;
@@ -46,6 +47,7 @@ public abstract class RandomClaim<U extends Claim> {
 
 	private void populateTherapist(Claim claim) {
 		claim.setRespiratoryTherapistSignature(getClaimSignature(CodeValueConsts.SIGNATURE_TYPE_RRT_CD));
+		claim.setClaimRespiratoryTherapist(getRespiratoryTherapist(claim));
 	}
 
 	private void populateAuthorizer(Claim claim) {
@@ -134,10 +136,23 @@ public abstract class RandomClaim<U extends Claim> {
 			return av2pv(av);
 		} catch (AdpException e) {
 			e.printStackTrace();
-			throw new TestDBException("error getting vendor " + e.getMessage(), e);
+			throw new TestDBException("error getting physician " + e.getMessage(), e);
 		}
 	}
 
+	private RespiratoryTherapistView getRespiratoryTherapist(Claim claim) {
+		try {
+			String authorizerRegNum = RandomDataService.instance().getRandomRespiratoryTherapist();		
+			AuthorizerService as = new AuthorizerServiceImpl();
+			AuthorizerView av = as.getAuthorizerView(authorizerRegNum, null, null);
+			claim.setSignedDate(getRecentDate());
+			return av2rtv(av);
+		} catch (AdpException e) {
+			e.printStackTrace();
+			throw new TestDBException("error getting reg'd therapist " + e.getMessage(), e);
+		}
+	}
+	
 	private PhysicianView av2pv(AuthorizerView av) {
 		PhysicianView pv = new PhysicianView();
 		pv.setFirstName(av.getFirstName());
@@ -146,6 +161,16 @@ public abstract class RandomClaim<U extends Claim> {
 		pv.setBillingNum(av.getRegNum());
 		pv.setDisciplineCode("MD");
 		return pv;
+	}
+
+	private RespiratoryTherapistView av2rtv(AuthorizerView av) {
+		RespiratoryTherapistView rtv = new RespiratoryTherapistView();
+		rtv.setFirstName(av.getFirstName());
+		rtv.setLastName(av.getLastName());
+		rtv.setPhone(av.getPhone());		
+		rtv.setBillingNum(av.getRegNum());
+		rtv.setRegistrationNumber(av.getRegNum());
+		return rtv;
 	}
 
 	private boolean coinToss() {

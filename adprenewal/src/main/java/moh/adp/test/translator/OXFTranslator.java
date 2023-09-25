@@ -32,7 +32,7 @@ public class OXFTranslator extends DCTranslator<ClaimOxygen, OxFirstTimeForm1> {
 		translateSection2(claim, form);
 		nullsToEmptyObjects(form);
 		unsex(form);
-		//removeNonGM(form);
+		removeNonOXF(form);
 	}
 
 	private void initialiseForm(OxFirstTimeForm1 form) {
@@ -46,25 +46,21 @@ public class OXFTranslator extends DCTranslator<ClaimOxygen, OxFirstTimeForm1> {
 
 	//See GMSection2Parser (reversing logic)
 	protected void translateSection2(ClaimOxygen claimGM, OxFirstTimeForm1 form) {
-		//Ad hoc parsing - very ugly code in ADAM, here.
 
 	}	
 
-/*	
-	private void setProperty(Confirmation conf, String setterName, String val) {
-		try {
-			Method method = Confirmation.class.getMethod(setterName, String.class);
-			method.invoke(conf, val);
-		} catch (NoSuchMethodException e) {
-			System.out.println("no such method " + setterName);	
-		} catch (SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) { 
-			System.out.println("Exception trying to invoke " + setterName + "on " + val);
-			e.printStackTrace();
-			throw new TestDBException("Exception translating GM Claim", e);
-		} catch (Exception e) {
-			System.out.println("something has gone wrong " + conf + " " + val + " " + setterName);
-		}
-	} */
+	private void removeNonOXF(OxFirstTimeForm1 form) {
+		form.getSection4().setAudiologist(null);
+		form.getSection4().setClinicInfo(null);
+		form.getSection4().setDiabetesProgram(null);
+		form.getSection4().setEquipmentSpec(null);
+		form.getSection4().setNoteToADP(null);
+		form.getSection4().setPagesAttachments(null);
+		form.getSection4().setPrescriber(null);
+		form.getSection4().setProofOfDelivery(null);
+		form.getSection4().setRehabilitationAssessor(null);
+		form.getSection4().setVendor2(null);
+	}
 
 	private boolean getProperty(ClaimOxygen claimGM, String methodName) {
 		try {

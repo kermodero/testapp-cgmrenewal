@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -50,6 +51,10 @@ public class RandomDataService implements RandomQueries {
 		return getOneValue(RANDOM_PHYSICIAN_ID, String.class).trim();
 	}
 
+	public String getRandomRespiratoryTherapist() {
+		return getOneValue(RANDOM_RESPIRATORY_THERAPIST_ID, String.class).trim();
+	}
+	
 	private <T> T getOneValue(String sql, Class<T> classT) {
 		try {
 			PreparedStatement ps = getStatement(sql);
@@ -95,5 +100,6 @@ public class RandomDataService implements RandomQueries {
 		}
 		return adpDS;
 	}
+
 
 }

@@ -12,8 +12,9 @@ import org.slf4j.Logger;
 
 import moh.adp.db.renewalservice.TestCaseService;
 import moh.adp.db.renewalservice.TestResult;
+import moh.adp.server.AdpServiceLocator;
 import moh.adp.server.esubmission.eClaim.EClaimBatchService;
-import moh.adp.server.esubmission.eClaim.ERenewalBatchProcessingService;
+import moh.adp.server.esubmission.eRenewal.service.ERenewalService;
 import moh.adp.testapp.rest.common.Result;
 import moh.adp.testapp.rest.common.TestReport;
 import moh.adp.testapp.rest.common.Result.Outcome;
@@ -55,7 +56,7 @@ public class ADAMServer {
 	public Result runReport(TestResult testResult) {
 	    logger.debug("running test result " + logger + " " + testResult + " service? ");
 	    TestReport testReport = testReportService.runGMRenewalReport(testResult, em);
-		return new Result("report run", Result.Outcome.UNKNOWN);
+		return new Result("report run " + testReport.toString(), Result.Outcome.UNKNOWN);
 	}	
 	
 	public Result runRenewalRandom(String numberOfRecords) {
@@ -82,8 +83,8 @@ public class ADAMServer {
 		synchronized (renewalBatchLock) { // ensure this blocks if concurrent attempts are made to execute it.		
 			EClaimBatchService.initSFTPConnection();
 			EClaimBatchService.loadEClaimFiles();
-			ERenewalBatchProcessingService eRenewalBatchProcess = new ERenewalBatchProcessingService();
-			eRenewalBatchProcess.processFiles();
+			ERenewalService eRenewalService = (ERenewalService) AdpServiceLocator.getBeanReference(ERenewalService.class);
+			eRenewalService.processERenewalFiles();
 		}		
 		return new Result("Payment Batch successful.", Outcome.SUCCESS);
 	}		
