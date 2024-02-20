@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -71,15 +72,11 @@ public abstract class SectionTranslator {
 		}
 	}
 
-	private String asGetter(String propName) {
-		return "get" + StringUtils.capitalize(propName);
-	}
-
 	private List<String> asGetters(String[] srcProperties) {
-		List<String> getters = new ArrayList<>();
-		for(String srcProperty : srcProperties)
-			getters.add(asGetter(srcProperty));
-		return getters;
+		return Arrays.asList(srcProperties)
+				.stream()
+				.map(propName -> "get" + StringUtils.capitalize(propName))
+				.collect(Collectors.toList());
 	}
 	
 	protected <V> void populateAll(Class<?> beanClass, Claim claim, V v) {

@@ -1,7 +1,6 @@
 package moh.adp.test;
 
 import moh.adp.model.claim.Claim;
-import moh.adp.server.esubmission.xml.parser.util.XMLParserConsts;
 import moh.adp.xml.model.XmlForm;
 import moh.adp.xml.model.common.ConfirmationOfBenefit;
 import moh.adp.xml.model.common.Section1;
